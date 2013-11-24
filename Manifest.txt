@@ -1,0 +1,3 @@
+Manifest-Version: 1.1
+Created-By: Andrew Lopreiato
+Main-Class: org.urbangaming.MainDriver
