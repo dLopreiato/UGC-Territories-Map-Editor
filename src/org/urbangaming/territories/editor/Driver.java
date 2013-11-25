@@ -1,14 +1,12 @@
 package org.urbangaming.territories.editor;
-
 import java.awt.*;
 import java.io.*;
-import java.util.*;
 import org.urbangaming.territories.core.*;
 
 /**
  * This is the temporary class that will manually write all of the given map data to a file.
  * @author Andrew Lopreiato
- * @version 1.0 11/14/13
+ * @version 1.1 11/14/13
  */
 public class Driver {
 
@@ -20,19 +18,14 @@ public class Driver {
 		// initialize map
 		TerritoriesMap territoriesFallMap = new TerritoriesMap();
 		
-		// populate territory list
-		PopulateTerritoryList(territoriesFallMap.getTerritories());
-		
 		// populate team list
-		PopulateTeamList(territoriesFallMap.getTeams());
+		PopulateTeamList(territoriesFallMap);
+		
+		// populate territory list
+		PopulateTerritoryList(territoriesFallMap);
 		
 		// populate connection list
-		PopulateConnectionList(territoriesFallMap.getConnections());
-		
-		
-		for (int i = 0; i < territoriesFallMap.getAmountOfTerritories(); i++) {
-			SetTerritoryOwner(territoriesFallMap.getTerritory(i), territoriesFallMap.getTeams());
-		}
+		PopulateConnectionList(territoriesFallMap);
 		
 		// Serialize the map
 		try {
@@ -44,23 +37,12 @@ public class Driver {
 		}
 		
 	} // END main
-	
-	/**
-	 * Will prompt the user which team they would like to set the given territory to, and then adds that territory to
-	 * the team's territory list.
-	 * @param input Scanner to read the input.
-	 * @param territory Territory to prompt the user about.
-	 * @param teamsList The available teams.
-	 */
-	private static void SetTerritoryOwner(Territory territory, ArrayList<Team> teamsList) {	
-		teamsList.get(0).OwnedTerritories.add(territory);
-	} // END GetTerritoryOwner
 
 	/**
-	 * Hard coded method to populate the territories.
+	 * Hard coded method to populate the territories. All territories default to the team in 0.
 	 * @param list List to populate to.
 	 */
-	private static void PopulateTerritoryList(ArrayList<Territory> list) {
+	private static void PopulateTerritoryList(TerritoriesMap tMap) {
 		Polygon tempPoly = null;
 		
 		// MILLENNIUM SCIENCE COMPLEX
@@ -71,7 +53,7 @@ public class Driver {
 		tempPoly.addPoint(730, 337);
 		tempPoly.addPoint(721, 311);
 		tempPoly.addPoint(663, 319);
-		list.add(new Territory("Millennium Science Complex", tempPoly));
+		tMap.AddTerritory(new Territory("Millennium Science Complex", tempPoly), tMap.GetTeam(0));
 		
 		
 		// WEST POLLOCK
@@ -84,7 +66,7 @@ public class Driver {
 		tempPoly.addPoint(683, 430);
 		tempPoly.addPoint(690, 393);
 		tempPoly.addPoint(680, 373);
-		list.add(new Territory("West Pollock", tempPoly));
+		tMap.AddTerritory(new Territory("West Pollock", tempPoly), tMap.GetTeam(0));
 		
 		// EAST POLLOCK
 		tempPoly = new Polygon();
@@ -97,7 +79,7 @@ public class Driver {
 		tempPoly.addPoint(741, 380);
 		tempPoly.addPoint(723, 382);
 		tempPoly.addPoint(721, 367);
-		list.add(new Territory("East Pollock", tempPoly));
+		tMap.AddTerritory(new Territory("East Pollock", tempPoly), tMap.GetTeam(0));
 		
 		// LOWER OLD MAIN
 		tempPoly = new Polygon();
@@ -105,7 +87,7 @@ public class Driver {
 		tempPoly.addPoint(379, 524);
 		tempPoly.addPoint(448, 523);
 		tempPoly.addPoint(448, 480);
-		list.add(new Territory("Lower Old Main", tempPoly));
+		tMap.AddTerritory(new Territory("Lower Old Main", tempPoly), tMap.GetTeam(0));
 		
 		// UPPER OLD MAIN
 		tempPoly = new Polygon();
@@ -116,7 +98,7 @@ public class Driver {
 		tempPoly.addPoint(448, 395);
 		tempPoly.addPoint(447, 467);
 		tempPoly.addPoint(379, 471);
-		list.add(new Territory("Upper Old Main", tempPoly));
+		tMap.AddTerritory(new Territory("Upper Old Main", tempPoly), tMap.GetTeam(0));
 		
 		// BOUKE
 		tempPoly = new Polygon();
@@ -132,7 +114,8 @@ public class Driver {
 		tempPoly.addPoint(535, 344);
 		tempPoly.addPoint(538, 374);
 		tempPoly.addPoint(517, 379);
-		list.add(new Territory("Bouke", tempPoly));
+		tMap.AddTerritory(new Territory("Bouke", tempPoly), tMap.GetTeam(0));
+
 		
 		// EASTVIEW TERRACE
 		tempPoly = new Polygon();
@@ -146,7 +129,7 @@ public class Driver {
 		tempPoly.addPoint(795, 493);
 		tempPoly.addPoint(795, 486);
 		tempPoly.addPoint(778, 486);
-		list.add(new Territory("Eastview Terrace", tempPoly));
+		tMap.AddTerritory(new Territory("Eastview Terrace", tempPoly), tMap.GetTeam(0));
 		
 		// FOREST RESOURCES
 		tempPoly = new Polygon();
@@ -158,7 +141,7 @@ public class Driver {
 		tempPoly.addPoint(673, 70);
 		tempPoly.addPoint(686, 126);
 		tempPoly.addPoint(634, 135);
-		list.add(new Territory("Forest Resources", tempPoly));
+		tMap.AddTerritory(new Territory("Forest Resources", tempPoly), tMap.GetTeam(0));
 		
 		// BUSINESS
 		tempPoly = new Polygon();
@@ -169,7 +152,7 @@ public class Driver {
 		tempPoly.addPoint(624, 118);
 		tempPoly.addPoint(627, 136);
 		tempPoly.addPoint(560, 152);
-		list.add(new Territory("Business Building", tempPoly));
+		tMap.AddTerritory(new Territory("Business Building", tempPoly), tMap.GetTeam(0));
 		
 		// AG SCI
 		tempPoly = new Polygon();
@@ -179,7 +162,7 @@ public class Driver {
 		tempPoly.addPoint(634, 152);
 		tempPoly.addPoint(643, 204);
 		tempPoly.addPoint(571, 217);
-		list.add(new Territory("Agricultural Sciences", tempPoly));
+		tMap.AddTerritory(new Territory("Agricultural Sciences", tempPoly), tMap.GetTeam(0));
 		
 		// THOMAS
 		tempPoly = new Polygon();
@@ -192,7 +175,7 @@ public class Driver {
 		tempPoly.addPoint(630, 317);
 		tempPoly.addPoint(635, 364);
 		tempPoly.addPoint(594, 371);
-		list.add(new Territory("Thomas", tempPoly));
+		tMap.AddTerritory(new Territory("Thomas", tempPoly), tMap.GetTeam(0));
 		
 		// FERGUSON
 		tempPoly = new Polygon();
@@ -207,7 +190,7 @@ public class Driver {
 		tempPoly.addPoint(546, 265);
 		tempPoly.addPoint(529, 280);
 		tempPoly.addPoint(498, 290);
-		list.add(new Territory("Ferguson", tempPoly));
+		tMap.AddTerritory(new Territory("Ferguson", tempPoly), tMap.GetTeam(0));
 		
 		// MEULLER
 		tempPoly = new Polygon();
@@ -225,7 +208,7 @@ public class Driver {
 		tempPoly.addPoint(468, 313);
 		tempPoly.addPoint(466, 318);
 		tempPoly.addPoint(442, 317);
-		list.add(new Territory("Mueller", tempPoly));
+		tMap.AddTerritory(new Territory("Mueller", tempPoly), tMap.GetTeam(0));
 		
 		// FORUM
 		tempPoly = new Polygon();
@@ -237,7 +220,7 @@ public class Driver {
 		tempPoly.addPoint(454, 191);
 		tempPoly.addPoint(452, 234);
 		tempPoly.addPoint(406, 232);
-		list.add(new Territory("Forum", tempPoly));
+		tMap.AddTerritory(new Territory("Forum", tempPoly), tMap.GetTeam(0));
 		
 		// OSWALD
 		tempPoly = new Polygon();
@@ -249,7 +232,7 @@ public class Driver {
 		tempPoly.addPoint(434, 360);
 		tempPoly.addPoint(387, 361);
 		tempPoly.addPoint(378, 355);
-		list.add(new Territory("Oswald Tower", tempPoly));
+		tMap.AddTerritory(new Territory("Oswald Tower", tempPoly), tMap.GetTeam(0));
 		
 		// CHAMBERS
 		tempPoly = new Polygon();
@@ -260,7 +243,7 @@ public class Driver {
 		tempPoly.addPoint(368, 257);
 		tempPoly.addPoint(358, 263);
 		tempPoly.addPoint(306, 263);
-		list.add(new Territory("Chambers", tempPoly));
+		tMap.AddTerritory(new Territory("Chambers", tempPoly), tMap.GetTeam(0));
 		
 		// LION SHIRE
 		tempPoly = new Polygon();
@@ -273,7 +256,7 @@ public class Driver {
 		tempPoly.addPoint(250, 265);
 		tempPoly.addPoint(239, 261);
 		tempPoly.addPoint(191, 259);
-		list.add(new Territory("Lion Shrine", tempPoly));
+		tMap.AddTerritory(new Territory("Lion Shrine", tempPoly), tMap.GetTeam(0));
 		
 		// EAST QUAD
 		tempPoly = new Polygon();
@@ -289,7 +272,7 @@ public class Driver {
 		tempPoly.addPoint(718, 158);
 		tempPoly.addPoint(715, 155);
 		tempPoly.addPoint(718, 153);
-		list.add(new Territory("East Quad", tempPoly));
+		tMap.AddTerritory(new Territory("East Quad", tempPoly), tMap.GetTeam(0));
 		
 		// NORTH QUAD
 		tempPoly = new Polygon();
@@ -301,7 +284,7 @@ public class Driver {
 		tempPoly.addPoint(540, 143);
 		tempPoly.addPoint(541, 147);
 		tempPoly.addPoint(524, 152);
-		list.add(new Territory("North Quad", tempPoly));
+		tMap.AddTerritory(new Territory("North Quad", tempPoly), tMap.GetTeam(0));
 		
 		// NORTH FOREST
 		tempPoly = new Polygon();
@@ -311,7 +294,7 @@ public class Driver {
 		tempPoly.addPoint(429, 171);
 		tempPoly.addPoint(448, 148);
 		tempPoly.addPoint(442, 121);
-		list.add(new Territory("North Forest", tempPoly));
+		tMap.AddTerritory(new Territory("North Forest", tempPoly), tMap.GetTeam(0));
 		
 		// IST
 		tempPoly = new Polygon();
@@ -322,7 +305,7 @@ public class Driver {
 		tempPoly.addPoint(195, 394);
 		tempPoly.addPoint(182, 388);
 		tempPoly.addPoint(184, 379);
-		list.add(new Territory("IST", tempPoly));
+		tMap.AddTerritory(new Territory("IST", tempPoly), tMap.GetTeam(0));
 		
 		// LEONHARD
 		tempPoly = new Polygon();
@@ -331,7 +314,7 @@ public class Driver {
 		tempPoly.addPoint(87, 419);
 		tempPoly.addPoint(88, 384);
 		tempPoly.addPoint(76, 393);
-		list.add(new Territory("Leonhard", tempPoly));
+		tMap.AddTerritory(new Territory("Leonhard", tempPoly), tMap.GetTeam(0));
 		
 		// MCELWAIN
 		tempPoly = new Polygon();
@@ -339,7 +322,7 @@ public class Driver {
 		tempPoly.addPoint(636, 370);
 		tempPoly.addPoint(643, 417);
 		tempPoly.addPoint(603, 421);
-		list.add(new Territory("McElwain", tempPoly));
+		tMap.AddTerritory(new Territory("McElwain", tempPoly), tMap.GetTeam(0));
 		
 		// WEST QUAD
 		tempPoly = new Polygon();
@@ -353,7 +336,7 @@ public class Driver {
 		tempPoly.addPoint(301, 356);
 		tempPoly.addPoint(301, 349);
 		tempPoly.addPoint(292, 349);
-		list.add(new Territory("West Quad", tempPoly));
+		tMap.AddTerritory(new Territory("West Quad", tempPoly), tMap.GetTeam(0));
 		
 		// HAMMOND
 		tempPoly = new Polygon();
@@ -363,7 +346,7 @@ public class Driver {
 		tempPoly.addPoint(318, 498);
 		tempPoly.addPoint(318, 525);
 		tempPoly.addPoint(262, 525);
-		list.add(new Territory("Hammond", tempPoly));
+		tMap.AddTerritory(new Territory("Hammond", tempPoly), tMap.GetTeam(0));
 		
 		// CARNEGIE
 		tempPoly = new Polygon();
@@ -373,7 +356,7 @@ public class Driver {
 		tempPoly.addPoint(368, 365);
 		tempPoly.addPoint(368, 391);
 		tempPoly.addPoint(308, 391);
-		list.add(new Territory("Carnegie", tempPoly));
+		tMap.AddTerritory(new Territory("Carnegie", tempPoly), tMap.GetTeam(0));
 		
 		// ELECTRICAL ENGINEERING
 		tempPoly = new Polygon();
@@ -391,7 +374,7 @@ public class Driver {
 		tempPoly.addPoint(291, 462);
 		tempPoly.addPoint(291, 432);
 		tempPoly.addPoint(288, 432);
-		list.add(new Territory("Electrical Engineering", tempPoly));
+		tMap.AddTerritory(new Territory("Electrical Engineering", tempPoly), tMap.GetTeam(0));
 		
 		// WALKER
 		tempPoly = new Polygon();
@@ -403,7 +386,7 @@ public class Driver {
 		tempPoly.addPoint(191, 449);
 		tempPoly.addPoint(185, 449);
 		tempPoly.addPoint(183, 431);
-		list.add(new Territory("Walker", tempPoly));
+		tMap.AddTerritory(new Territory("Walker", tempPoly), tMap.GetTeam(0));
 		
 	} // END PopulateTerritoryList
 	
@@ -411,137 +394,137 @@ public class Driver {
 	 * Hard coded method to populate the teams.
 	 * @param list List to populate to.
 	 */
-	private static void PopulateTeamList(ArrayList<Team> list) {
+	private static void PopulateTeamList(TerritoriesMap tMap) {
 		int transparency = 180;
-		list.add(new Team("Unowned"));
-		list.add(new Team("Norb's Team", new Color(0, 0, 255, transparency)));
-		list.add(new Team("Dave's Team", new Color(255, 51, 153, transparency)));
-		list.add(new Team("Sarah/John's Team", new Color(255, 0, 0, transparency)));
-		list.add(new Team("Clay's Team", new Color(255, 255, 0, transparency)));
-		list.add(new Team("Nimda", new Color(0, 0, 0, transparency)));
+		tMap.AddTeam(new Team("Unowned"));
+		tMap.AddTeam(new Team("Norb's Team", new Color(0, 0, 255, transparency)));
+		tMap.AddTeam(new Team("Dave's Team", new Color(255, 51, 153, transparency)));
+		tMap.AddTeam(new Team("Sarah/John's Team", new Color(255, 0, 0, transparency)));
+		tMap.AddTeam(new Team("Clay's Team", new Color(255, 255, 0, transparency)));
+		tMap.AddTeam(new Team("Nimda", new Color(0, 0, 0, transparency)));
 	} // END PopulateTeamList
 	
 	/**
 	 * Hard coded method to populate the connections.
 	 * @param list List to populate to.
 	 */
-	private static void PopulateConnectionList(ArrayList<ConnectionLine> list) {
+	private static void PopulateConnectionList(TerritoriesMap tMap) {
 		// Business to Forest Resources
-		list.add(new ConnectionLine(624, 127, 634, 125));
+		tMap.AddConnectionLine(new ConnectionLine(624, 127, 634, 125));
 		// Business to Ag Sci
-		list.add(new ConnectionLine(587, 143, 590, 150));
+		tMap.AddConnectionLine(new ConnectionLine(587, 143, 590, 150));
 		// Business to North Quad
-		list.add(new ConnectionLine(553, 106, 531, 115));
+		tMap.AddConnectionLine(new ConnectionLine(553, 106, 531, 115));
 		// Forest Resources to East Quad
-		list.add(new ConnectionLine(683, 124, 719, 147));
+		tMap.AddConnectionLine(new ConnectionLine(683, 124, 719, 147));
 		// Forest Resources to Mil Sci
-		list.add(new ConnectionLine(665, 126, 694, 318));
+		tMap.AddConnectionLine(new ConnectionLine(665, 126, 694, 318));
 		// East Quad to Mil Sci
-		list.add(new ConnectionLine(735, 168, 714, 314));
+		tMap.AddConnectionLine(new ConnectionLine(735, 168, 714, 314));
 		// Ag Sci to Mil Sci
-		list.add(new ConnectionLine(636, 202, 676, 320));
+		tMap.AddConnectionLine(new ConnectionLine(636, 202, 676, 320));
 		// Ag Sci to Thomas
-		list.add(new ConnectionLine(601, 209, 616, 316));
+		tMap.AddConnectionLine(new ConnectionLine(601, 209, 616, 316));
 		// Ag Sci to Ferguson
-		list.add(new ConnectionLine(572, 214, 550, 231));
+		tMap.AddConnectionLine(new ConnectionLine(572, 214, 550, 231));
 		// Mil Sci to Thomas
-		list.add(new ConnectionLine(631, 346, 669, 342));
+		tMap.AddConnectionLine(new ConnectionLine(631, 346, 669, 342));
 		// Mil Sci to East Pollock
-		list.add(new ConnectionLine(706, 352, 708, 372));
+		tMap.AddConnectionLine(new ConnectionLine(706, 352, 708, 372));
 		// Mil Sci to West Pollock
-		list.add(new ConnectionLine(677, 356, 675, 375));
+		tMap.AddConnectionLine(new ConnectionLine(677, 356, 675, 375));
 		// East Pollock to West Pollock
-		list.add(new ConnectionLine(685, 393, 696, 391));
+		tMap.AddConnectionLine(new ConnectionLine(685, 393, 696, 391));
 		// East Pollock to Eastview
-		list.add(new ConnectionLine(743, 416, 782, 459));
+		tMap.AddConnectionLine(new ConnectionLine(743, 416, 782, 459));
 		// West Pollock to East View
-		list.add(new ConnectionLine(673, 439, 781, 473));
+		tMap.AddConnectionLine(new ConnectionLine(673, 439, 781, 473));
 		// West Pollock to McElwain
-		list.add(new ConnectionLine(651, 392, 637, 396));
+		tMap.AddConnectionLine(new ConnectionLine(651, 392, 637, 396));
 		// McElwain to South Old Main
-		list.add(new ConnectionLine(605, 418, 446, 482));
+		tMap.AddConnectionLine(new ConnectionLine(605, 418, 446, 482));
 		// McElwain to Thomas
-		list.add(new ConnectionLine(617, 375, 615, 365));
+		tMap.AddConnectionLine(new ConnectionLine(617, 375, 615, 365));
 		// McElwain to North Old Main
-		list.add(new ConnectionLine(602, 397, 445, 438));
+		tMap.AddConnectionLine(new ConnectionLine(602, 397, 445, 438));
 		// McElwain to Bouke
-		list.add(new ConnectionLine(598, 389, 564, 373));
+		tMap.AddConnectionLine(new ConnectionLine(598, 389, 564, 373));
 		// Thomas to Bouke
-		list.add(new ConnectionLine(593, 350, 581, 353));
+		tMap.AddConnectionLine(new ConnectionLine(593, 350, 581, 353));
 		// Bouke to North Old Main
-		list.add(new ConnectionLine(538, 351, 445, 412));
+		tMap.AddConnectionLine(new ConnectionLine(538, 351, 445, 412));
 		// Bouke to Fergeson
-		list.add(new ConnectionLine(550, 329, 536, 270));
+		tMap.AddConnectionLine(new ConnectionLine(550, 329, 536, 270));
 		// Ferguson to North Quad
-		list.add(new ConnectionLine(537, 234, 527, 149));
+		tMap.AddConnectionLine(new ConnectionLine(537, 234, 527, 149));
 		// Ferguson to Mueller
-		list.add(new ConnectionLine(500, 282, 492, 280));
+		tMap.AddConnectionLine(new ConnectionLine(500, 282, 492, 280));
 		// North Quad to North Forest
-		list.add(new ConnectionLine(520, 124, 442, 135));
+		tMap.AddConnectionLine(new ConnectionLine(520, 124, 442, 135));
 		// North Quad to Forum
-		list.add(new ConnectionLine(451, 200, 524, 142));
+		tMap.AddConnectionLine(new ConnectionLine(451, 200, 524, 142));
 		// North Forest to Forum
-		list.add(new ConnectionLine(412, 170, 414, 180));
+		tMap.AddConnectionLine(new ConnectionLine(412, 170, 414, 180));
 		// North Forest to Chambers
-		list.add(new ConnectionLine(395, 165, 359, 216));
+		tMap.AddConnectionLine(new ConnectionLine(395, 165, 359, 216));
 		// Forum to Mueller
-		list.add(new ConnectionLine(441, 230, 448, 273));
+		tMap.AddConnectionLine(new ConnectionLine(441, 230, 448, 273));
 		// Forum to Chambers
-		list.add(new ConnectionLine(409, 220, 364, 228));
+		tMap.AddConnectionLine(new ConnectionLine(409, 220, 364, 228));
 		// Meuller to Oswald
-		list.add(new ConnectionLine(446, 313, 439, 320));
+		tMap.AddConnectionLine(new ConnectionLine(446, 313, 439, 320));
 		// Oswald to Chambers
-		list.add(new ConnectionLine(392, 317, 360, 257));
+		tMap.AddConnectionLine(new ConnectionLine(392, 317, 360, 257));
 		// Oswald to Carnegie
-		list.add(new ConnectionLine(384, 354, 365, 368));
+		tMap.AddConnectionLine(new ConnectionLine(384, 354, 365, 368));
 		// Oswald to North Old Main
-		list.add(new ConnectionLine(415, 358, 437, 411));
+		tMap.AddConnectionLine(new ConnectionLine(415, 358, 437, 411));
 		// North Old Main to EE
-		list.add(new ConnectionLine(394, 454, 346, 448));
+		tMap.AddConnectionLine(new ConnectionLine(394, 454, 346, 448));
 		// North Old Main to South Old Main
-		list.add(new ConnectionLine(415, 467, 416, 482));
+		tMap.AddConnectionLine(new ConnectionLine(415, 467, 416, 482));
 		// South Old Main to Hammond
-		list.add(new ConnectionLine(382, 514, 315, 514));
+		tMap.AddConnectionLine(new ConnectionLine(382, 514, 315, 514));
 		// Hammond to EE
-		list.add(new ConnectionLine(309, 499, 308, 460));
+		tMap.AddConnectionLine(new ConnectionLine(309, 499, 308, 460));
 		// Hammond to Walker
-		list.add(new ConnectionLine(272, 516, 224, 456));
+		tMap.AddConnectionLine(new ConnectionLine(272, 516, 224, 456));
 		// EE to Walker
-		list.add(new ConnectionLine(292, 444, 223, 444));
+		tMap.AddConnectionLine(new ConnectionLine(292, 444, 223, 444));
 		// EE to Carnegie
-		list.add(new ConnectionLine(323, 428, 326, 389));
+		tMap.AddConnectionLine(new ConnectionLine(323, 428, 326, 389));
 		// Carnegie to West Quad
-		list.add(new ConnectionLine(320, 376, 320, 368));
+		tMap.AddConnectionLine(new ConnectionLine(320, 376, 320, 368));
 		// West Halls to Chambers
-		list.add(new ConnectionLine(313, 330, 316, 261));
+		tMap.AddConnectionLine(new ConnectionLine(313, 330, 316, 261));
 		// West Halls to Lion Shrine
-		list.add(new ConnectionLine(294, 330, 246, 261));
+		tMap.AddConnectionLine(new ConnectionLine(294, 330, 246, 261));
 		// West Halls to IST
-		list.add(new ConnectionLine(294, 346, 248, 380));
+		tMap.AddConnectionLine(new ConnectionLine(294, 346, 248, 380));
 		// Chambers to Lion Shrine
-		list.add(new ConnectionLine(327, 234, 272, 236));
+		tMap.AddConnectionLine(new ConnectionLine(327, 234, 272, 236));
 		// IST to Walker
-		list.add(new ConnectionLine(204, 392, 204, 421));
+		tMap.AddConnectionLine(new ConnectionLine(204, 392, 204, 421));
 		// IST to Lion Shrine
-		list.add(new ConnectionLine(202, 376, 204, 257));
+		tMap.AddConnectionLine(new ConnectionLine(202, 376, 204, 257));
 		// IST to Leonhard
-		list.add(new ConnectionLine(185, 382, 85, 392));
+		tMap.AddConnectionLine(new ConnectionLine(185, 382, 85, 392));
 		// Lion Shrine to Leonhard
-		list.add(new ConnectionLine(192, 256, 86, 387));
+		tMap.AddConnectionLine(new ConnectionLine(192, 256, 86, 387));
 		// Walker to Leonhard
-		list.add(new ConnectionLine(188, 446, 84, 416));
+		tMap.AddConnectionLine(new ConnectionLine(188, 446, 84, 416));
 
 		// East Quad WRAPS Lion Shrine
-		list.add(new ConnectionLine(191, 244, 0, 202));
-		list.add(new ConnectionLine(773, 160, 857, 202));
+		tMap.AddConnectionLine(new ConnectionLine(191, 244, 0, 202));
+		tMap.AddConnectionLine(new ConnectionLine(773, 160, 857, 202));
 		
 		// Eastview WRAPS Leonhard
-		list.add(new ConnectionLine(827, 457, 857, 432));
-		list.add(new ConnectionLine(50, 407, 0, 432));
+		tMap.AddConnectionLine(new ConnectionLine(827, 457, 857, 432));
+		tMap.AddConnectionLine(new ConnectionLine(50, 407, 0, 432));
 		
 		// North Forest WRAPS South Old Main
-		list.add(new ConnectionLine(420, 131, 420, 0));
-		list.add(new ConnectionLine(420, 532, 420, 523));
+		tMap.AddConnectionLine(new ConnectionLine(420, 131, 420, 0));
+		tMap.AddConnectionLine(new ConnectionLine(420, 532, 420, 523));
 		
 	} // END PopulateConnectionList
 } // END MainDriver

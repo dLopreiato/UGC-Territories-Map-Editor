@@ -1,7 +1,5 @@
 package org.urbangaming.territories.client;
-import org.urbangaming.territories.core.Team;
 import org.urbangaming.territories.core.TerritoriesMap;
-import org.urbangaming.territories.core.Territory;
 import java.awt.Choice;
 import java.awt.GridLayout;
 import java.awt.Label;
@@ -12,13 +10,13 @@ import java.util.ArrayList;
  * Isolates all of the data and behavior that would be seen in the owner list portion of the main user interface. The
  * owner list is the series of names with choices next to them to allow a user to edit the territory's owner.
  * @author Andrew Lopreiato
- * @version 1.0 11/24/2013
+ * @version 1.1 11/24/2013
  */
 public class TerritoriesPanel extends Panel {
 	
 	// DATA MEMBERS
 	private ArrayList<Choice> ChoiceList = null;
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 	// END DATA MEMBERS
 
 	/**
@@ -40,24 +38,22 @@ public class TerritoriesPanel extends Panel {
 		this.setLayout(customGrid);
 		if (map == null)
 			return; // if its null, don't add anything
-		ArrayList<Territory> territoriesManifest = map.getTerritories();
-		ArrayList<Team> teamManifest = map.getTeams();
-		ChoiceList = new ArrayList<Choice>(territoriesManifest.size());
-		customGrid.setRows(territoriesManifest.size());
+		ChoiceList = new ArrayList<Choice>(map.GetAmountOfTerritories());
+		customGrid.setRows(map.GetAmountOfTerritories());
 		// for each territory in the territory manifest
-		for (int i = 0; i < territoriesManifest.size(); i++) {
-			// add the territory name as its label
-			this.add(new Label(territoriesManifest.get(i).Name));
-
-			Choice territoryChoice = new Choice();
+		for (int i = 0; i < map.GetAmountOfTerritories(); i++) {
+			// add the territory name to the panel
+			this.add(new Label(map.GetTerritory(i).Name));
 			
+			// Create a new set of choices
+			Choice territoryChoice = new Choice();
 			// for each team in the team manifest
-			for (int j = 0; j < teamManifest.size(); j++) {
+			for (int j = 0; j < map.GetAmountOfTeams(); j++) {
 				// add the possible teams as choices
-				territoryChoice.add(teamManifest.get(j).Name);
+				territoryChoice.add(map.GetTeam(j).Name);
 				
 				// if this territory is owned by relevant team
-				if (teamManifest.get(j).OwnedTerritories.contains(territoriesManifest.get(i))) {
+				if (map.GetTerritoryOwner(map.GetTerritory(i)).equals(map.GetTeam(j))) {
 					// show this team as the selected team
 					territoryChoice.select(j);
 				}
@@ -65,6 +61,7 @@ public class TerritoriesPanel extends Panel {
 			
 			// add the choices to the list
 			ChoiceList.add(territoryChoice);
+			// add the choice to the panel
 			this.add(territoryChoice);
 		}
 		

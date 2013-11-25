@@ -1,5 +1,4 @@
 package org.urbangaming.territories.core;
-
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -13,6 +12,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.io.Serializable;
 
 import javax.imageio.ImageIO;
@@ -22,14 +22,15 @@ import javax.imageio.ImageIO;
  * and connections between territories. Serialization has also been written into the class, making reading and writing
  * to disk easy.
  * @author Andrew Lopreiato
- * @version 1.0 10/16/13
+ * @version 1.1 11/24/13
  */
-public class TerritoriesMap implements Serializable{
+public class TerritoriesMap implements Serializable {
 	
 	// DATA MEMBERS
 	private ArrayList<Team> Teams;
 	private ArrayList<Territory> Territories;
 	private ArrayList<ConnectionLine> Connections;
+	private HashMap<Territory, Team> OwnersMap;
 	// END DATA MEMBERS
 
 	/**
@@ -39,56 +40,191 @@ public class TerritoriesMap implements Serializable{
 		Teams = new ArrayList<Team>();
 		Territories = new ArrayList<Territory>();
 		Connections = new ArrayList<ConnectionLine>();
+		OwnersMap = new HashMap<Territory, Team>();
 	} // END TerritoriesMap
 	
 	/**
-	 * Team list getter method.
-	 * @return the list of teams.
+	 * Adds a territory and with a given team.
+	 * @param territory
+	 * @param team
 	 */
-	public ArrayList<Team> getTeams() {
-		return Teams;
-	} // END getTeams
+	public void AddTerritory(Territory territory, Team team) {
+		OwnersMap.put(territory, team);
+		Territories.add(territory);
+	}
 	
 	/**
-	 * Territory list getter method.
-	 * @return the list of territories.
+	 * Adds a team.
+	 * @param team
 	 */
-	public ArrayList<Territory> getTerritories() {
-		return Territories;
-	} // END getTerritories
+	public void AddTeam(Team team) {
+		Teams.add(team);
+	}
 	
 	/**
-	 * ConnectionLine list getter method.
-	 * @return the list of connections.
+	 * Adds a connection line.
+	 * @param cLine
 	 */
-	public ArrayList<ConnectionLine> getConnections() {
-		return Connections;
-	} // END getConnections
+	public void AddConnectionLine(ConnectionLine cLine) {
+		Connections.add(cLine);
+	}
 	
 	/**
-	 * Team size getter method.
-	 * @return amount of teams.
+	 * Changes a territories owner to a given team.
+	 * @param territory
+	 * @param team
 	 */
-	public int getAmountOfTeams() {
+	public void SetTerritoriesTeam(Territory territory, Team team) {
+		OwnersMap.put(territory, team);
+	}
+	
+	/**
+	 * Removes a territory.
+	 * @param territory
+	 */
+	public void RemoveTerritory(Territory territory) {
+		OwnersMap.remove(territory);
+		Territories.remove(territory);
+	}
+	
+	/**
+	 * Removes a team. Will throw an exception if this team owns a territory.
+	 * @param team
+	 * @throws TerritoryException
+	 */
+	public void RemoveTeam(Team team) throws TerritoryException {
+		if (OwnersMap.containsValue(team)) {
+			throw new TerritoryException("This team owns territory, and cannot be deleted.");
+		}
+		Teams.remove(team);
+	}
+	
+	/**
+	 * Removes a connection line.
+	 * @param cLine
+	 */
+	public void RemoveConnectionLine(ConnectionLine cLine) {
+		Connections.remove(cLine);
+	}
+	
+	/**
+	 * Gives the number of teams.
+	 * @return
+	 */
+	public int GetAmountOfTeams() {
 		return Teams.size();
-	} // END getAmountOfTeams
+	}
 	
 	/**
-	 * Territory size getter method.
-	 * @return amount of territories.
+	 * Gives the number of territories.
+	 * @return
 	 */
-	public int getAmountOfTerritories() {
+	public int GetAmountOfTerritories() {
 		return Territories.size();
-	} // END getAmountOfTerritories
+	}
 	
 	/**
-	 * Individual territory getter method. 
-	 * @param i	index of the returned territory.
-	 * @return	desired territory.
+	 * Gives the number of connection lines.
+	 * @return
 	 */
-	public Territory getTerritory(int i) {
-		return Territories.get(i);
-	} // END getTerritory
+	public int GetAmountOfConnectionLines() {
+		return Connections.size();
+	}
+	
+	/**
+	 * Gives the team at an index.
+	 * @param index
+	 * @return
+	 */
+	public Team GetTeam(int index) {
+		return Teams.get(index);
+	}
+	
+	/**
+	 * Gives the territory at an index.
+	 * @param index
+	 * @return
+	 */
+	public Territory GetTerritory(int index) {
+		return Territories.get(index);
+	}
+	
+	/**
+	 * Checks if a team exists within the this territories map.
+	 * @param team
+	 * @return
+	 */
+	public Boolean TeamExists(Team team) {
+		return Teams.contains(team);
+	}
+	
+	/**
+	 * Checks if a territory exists within this territories map.
+	 * @param territory
+	 * @return
+	 */
+	public Boolean TerritoryExists(Territory territory) {
+		return Territories.contains(territory);
+	}
+	
+	/**
+	 * Checks if a connection line exists within this territories map.
+	 * @param cLine
+	 * @return
+	 */
+	public Boolean ConnectionLineExists(ConnectionLine cLine) {
+		return Connections.contains(cLine);
+	}
+	
+	/**
+	 * Gets the owner of a given territory.
+	 * @param territory
+	 * @return
+	 */
+	public Team GetTerritoryOwner(Territory territory) {
+		if (OwnersMap.containsKey(territory)) {
+			return OwnersMap.get(territory);
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Gets the territories of a given team.
+	 * @param team
+	 * @return
+	 */
+	public ArrayList<Territory> GetOwnedTerritories(Team team) {
+		ArrayList<Territory> returnValue = new ArrayList<Territory>();
+		for (int i = 0; i < Territories.size(); i++) {
+			if (OwnersMap.get(Territories.get(i)).equals(team)) {
+				returnValue.add(Territories.get(i));
+			}
+		}
+		return returnValue;
+	}
+	
+	/**
+	 * Gives an unbounded territories within this territories map.
+	 * @return
+	 */
+	public ArrayList<Territory> GetUnboundedTerritories() {
+		ArrayList<Territory> returnValue = new ArrayList<Territory>();
+		for (int i = 0; i < Territories.size(); i++) {
+			if (!OwnersMap.containsValue(Territories.get(i))) {
+				returnValue.add(Territories.get(i));
+			}
+		}
+		return returnValue;
+	}
+	
+	/**
+	 * Checks if there are any unbounded territories in this territories map.
+	 * @return
+	 */
+	public Boolean HasUnboundedTerritories() {
+		return !GetUnboundedTerritories().isEmpty();
+	}
 	
 	/**
 	 * Renders this territories map on top of a given base map.
@@ -111,7 +247,7 @@ public class TerritoriesMap implements Serializable{
 		// draw each territory 1 by 1
 		for (int i = 0; i < Teams.size(); i++) {
 			Color teamColor = Teams.get(i).Color;
-			ArrayList<Territory> territories = Teams.get(i).OwnedTerritories;
+			ArrayList<Territory> territories = GetOwnedTerritories(Teams.get(i));
 			for (int j = 0; j < territories.size(); j++) {
 				Polygon currentRegion = territories.get(j).Region;
 				// first the region
@@ -166,6 +302,6 @@ public class TerritoriesMap implements Serializable{
 		return returnValue;
 	} // END Deserialize
 	
-	/** Serialization version as of 10/16/2013 **/
-	private static final long serialVersionUID = 1L;
+	/** Serialization version as of 11/24/2013 **/
+	private static final long serialVersionUID = 2L;
 }

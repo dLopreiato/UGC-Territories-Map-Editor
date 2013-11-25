@@ -7,7 +7,7 @@ import org.urbangaming.territories.core.*;
  * This is the class that should be used by the territories admin. This class only allows editing of teams through the
  * console. A map file must already be in existence for this driver to work.
  * @author Andrew Lopreiato
- * @version 1.4 11/14/13
+ * @version 1.5 11/24/13
  */
 public class ConsoleDriver {
 
@@ -29,25 +29,24 @@ public class ConsoleDriver {
 			territoriesFallMap = TerritoriesMap.Deserialize("Fall2013.trmap");
 			
 			System.out.println("The following teams are available: ");
-			DisplayTeamList(territoriesFallMap.getTeams());
+			DisplayTeamList(territoriesFallMap);
 			
 			PauseUntilConfirmation(inputScanner);
 			
 			// check for differences
-			for (int i = 0; i < territoriesFallMap.getAmountOfTerritories(); i++) {
-				Territory relevantTerritory = territoriesFallMap.getTerritories().get(i);
-				Team currentOwner = FindOwner(relevantTerritory, territoriesFallMap.getTeams());
+			for (int i = 0; i < territoriesFallMap.GetAmountOfTerritories(); i++) {
+				Territory relevantTerritory = territoriesFallMap.GetTerritory(i);
+				Team currentOwner = territoriesFallMap.GetTerritoryOwner(relevantTerritory);
 				
 				// if the saved owner is no longer the current owner
 				if (!ReaffirmTeamsOwnership(inputScanner, relevantTerritory, currentOwner)) {
-					currentOwner.OwnedTerritories.remove(relevantTerritory);
-					changingTerritories.add(territoriesFallMap.getTerritories().get(i));
+					changingTerritories.add(territoriesFallMap.GetTerritory(i));
 				}
 			}
 			
 			// create the differences
 			for (int i = 0; i < changingTerritories.size(); i++) {
-				SetTerritoryOwner(inputScanner, changingTerritories.get(i), territoriesFallMap.getTeams());
+				SetTerritoryOwner(inputScanner, territoriesFallMap, changingTerritories.get(i));
 			}
 			
 			// draw the map
@@ -74,9 +73,9 @@ public class ConsoleDriver {
 	 * Will display to the user the teams and their corresponding numbers.
 	 * @param teamsList The list to read the teams from.
 	 */
-	private static void DisplayTeamList (ArrayList<Team> teamsList) {
-		for (int i = 0; i < teamsList.size(); i++) {
-			System.out.println(i + ": " + (teamsList.get(i).Name));
+	private static void DisplayTeamList (TerritoriesMap tMap) {
+		for (int i = 0; i < tMap.GetAmountOfTeams(); i++) {
+			System.out.println(i + ": " + (tMap.GetTeam(i).Name));
 		}
 	} // END DisplayTeamList
 	
@@ -87,13 +86,13 @@ public class ConsoleDriver {
 	 * @param territory Territory to prompt the user about.
 	 * @param teamsList The available teams.
 	 */
-	private static void SetTerritoryOwner(Scanner input, Territory territory, ArrayList<Team> teamsList) {
+	private static void SetTerritoryOwner(Scanner input, TerritoriesMap tMap, Territory territory) {
 		int userInput = -1;
 		while (userInput <= -1) {
 			System.out.print("What team owns " + territory.Name + "? ");
 			try {
 				userInput = input.nextInt();
-				if (userInput >= teamsList.size() || userInput < 0) {
+				if (userInput >= tMap.GetAmountOfTeams() || userInput < 0) {
 					throw new IOException("Team " + userInput + "does not exist. ");
 				}
 			} catch( InputMismatchException e) {
@@ -106,7 +105,7 @@ public class ConsoleDriver {
 			}
 			
 		}
-		teamsList.get(userInput).OwnedTerritories.add(territory);
+		tMap.SetTerritoriesTeam(territory, tMap.GetTeam(userInput));
 	} // END GetTerritoryOwner
 	
 	/**
@@ -143,21 +142,6 @@ public class ConsoleDriver {
 			return false;
 		}
 	} // END ReaffirmTeamsOwnership
-	
-	/**
-	 * Will search the team list for the given territory.
-	 * @param territory Territory in question.
-	 * @param teamList List of all teams.
-	 * @return The owner of the given territory.
-	 */
-	private static Team FindOwner(Territory territory, ArrayList<Team> teamList) {
-		for (int i = 0; i < teamList.size(); i++) {
-			if (teamList.get(i).OwnedTerritories.contains(territory)) {
-				return teamList.get(i);
-			}
-		}
-		return null;
-	} // END FindOwner
 	
 	/**
 	 * Will hold and display three dots until the user presses enter.

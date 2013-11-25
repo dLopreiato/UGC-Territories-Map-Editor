@@ -1,7 +1,5 @@
 package org.urbangaming.territories.client;
-import org.urbangaming.territories.core.Team;
 import org.urbangaming.territories.core.TerritoriesMap;
-import org.urbangaming.territories.core.Territory;
 import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.awt.Panel;
@@ -10,13 +8,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
 
 /**
  * This is the class that should be used by the territories admin. This class is the entry point for users wanting to
  * use a graphical interface. A map file must already be in existence for this driver to work.
  * @author Andrew Lopreiato
- * @version 1.0 11/24/13
+ * @version 1.1 11/24/13
  */
 public class Driver {
 	// DATA MEMBERS
@@ -74,14 +71,12 @@ public class Driver {
 	private static class ActionPanelListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getActionCommand().equals("SAVE")) {
-				//Update map
-				int amountOfTerritories = TerritoriesMap.getAmountOfTerritories(); 
-				for (int i = 0; i < amountOfTerritories; i++) {
-					Territory relevantTerritory = TerritoriesMap.getTerritory(i);
-					DetachTerritory(TerritoriesMap.getTeams(), relevantTerritory);
-					AttachTerritory(TerritoriesMap.getTeams().get(TerritoriesPanel.ChoiceForIndex(i)),
-							relevantTerritory);
+				//Update map 
+				for (int i = 0; i < TerritoriesMap.GetAmountOfTerritories(); i++) {
+						TerritoriesMap.SetTerritoriesTeam(TerritoriesMap.GetTerritory(i),
+						TerritoriesMap.GetTeam(TerritoriesPanel.ChoiceForIndex(i)));
 				}
+				// Serialize map
 				try {
 					TerritoriesMap.Serialize(ActionPanel.GetDataDirectory());
 				} catch (Exception ex) {
@@ -101,13 +96,10 @@ public class Driver {
 			}
 			if (e.getActionCommand().equals("DRAW")) {
 				if (TerritoriesMap != null) {
-					//Reflect the onscreen changes with the TerritoriesMap
-					int amountOfTerritories = TerritoriesMap.getAmountOfTerritories(); 
-					for (int i = 0; i < amountOfTerritories; i++) {
-						Territory relevantTerritory = TerritoriesMap.getTerritory(i);
-						DetachTerritory(TerritoriesMap.getTeams(), relevantTerritory);
-						AttachTerritory(TerritoriesMap.getTeams().get(TerritoriesPanel.ChoiceForIndex(i)),
-								relevantTerritory);
+					//Update map 
+					for (int i = 0; i < TerritoriesMap.GetAmountOfTerritories(); i++) {
+							TerritoriesMap.SetTerritoriesTeam(TerritoriesMap.GetTerritory(i),
+							TerritoriesMap.GetTeam(TerritoriesPanel.ChoiceForIndex(i)));
 					}
 					
 					// Draw
@@ -119,28 +111,5 @@ public class Driver {
 				}
 			}
 		}
-	} // END ActionPanelListener
-	
-	/**
-	 * Detaches a territory from its owning team.
-	 * @param teamsList The territories team list.
-	 * @param territory The relevant territory.
-	 */
-	private static void DetachTerritory(ArrayList<Team> teamsList, Territory territory) {
-		for (int i = 0; i < teamsList.size(); i++) {
-			if(teamsList.get(i).OwnedTerritories.contains(territory)) {
-				teamsList.get(i).OwnedTerritories.remove(territory);
-			}
-		}
-	} // END DetachTerritory
-	
-	/**
-	 * Attaches a territory to a desired team.
-	 * @param team The relevant team.
-	 * @param territory The relevant territory.
-	 */
-	private static void AttachTerritory(Team team, Territory territory) {
-		team.OwnedTerritories.add(territory);
-	} // END AttachTerritory
-	
+	} // END ActionPanelListener	
 } // END MainDriver
