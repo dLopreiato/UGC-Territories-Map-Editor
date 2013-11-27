@@ -1,5 +1,4 @@
 package org.urbangaming.territories.core;
-
 import java.awt.Polygon;
 import java.io.Serializable;
 

@@ -11,6 +11,12 @@ import org.urbangaming.territories.core.*;
  */
 public class ConsoleDriver {
 
+	// CONSTANTS
+	public static final String MAP_FILE = "Fall2013.trmp";
+	public static final String BASE_MAP = "BaseMap.png";
+	public static final String OUTPUT_MAP = "OutputMap.png";
+	// END CONSTANTS
+	
 	/**
 	 * The main running method.
 	 * @param args No options available.
@@ -26,7 +32,7 @@ public class ConsoleDriver {
 		ArrayList<Territory> changingTerritories = new ArrayList<Territory>();
 		
 		try {
-			territoriesFallMap = TerritoriesMap.Deserialize("Fall2013.trmap");
+			territoriesFallMap = TerritoriesMap.Deserialize(MAP_FILE);
 			
 			System.out.println("The following teams are available: ");
 			DisplayTeamList(territoriesFallMap);
@@ -51,12 +57,12 @@ public class ConsoleDriver {
 			
 			// draw the map
 			System.out.println("Drawing map...");
-			territoriesFallMap.Draw("BaseMap.png", "OutputMap.png");
+			territoriesFallMap.Draw(BASE_MAP, OUTPUT_MAP);
 			System.out.println("Map drawn.");
 			
 			// save the map
 			System.out.println("Saving map...");
-			territoriesFallMap.Serialize("Fall2013.trmap");
+			territoriesFallMap.Serialize(MAP_FILE);
 			System.out.println("Map saved.");
 			
 		} 

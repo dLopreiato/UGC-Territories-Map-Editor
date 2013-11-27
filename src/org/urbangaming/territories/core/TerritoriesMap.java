@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.RenderingHints;
+import java.awt.Shape;
+import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,7 +16,6 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.io.Serializable;
-
 import javax.imageio.ImageIO;
 
 /**
@@ -22,7 +23,7 @@ import javax.imageio.ImageIO;
  * and connections between territories. Serialization has also been written into the class, making reading and writing
  * to disk easy.
  * @author Andrew Lopreiato
- * @version 1.1 11/24/13
+// * @version 1.2 11/26/13
  */
 public class TerritoriesMap implements Serializable {
 	
@@ -34,7 +35,7 @@ public class TerritoriesMap implements Serializable {
 	// END DATA MEMBERS
 
 	/**
-	 * Constructs a map with no territories, teams, or connections.
+	 * Constructs a map with no territories, teams, or ConnectionLines.
 	 */
 	public TerritoriesMap() {	
 		Teams = new ArrayList<Team>();
@@ -45,141 +46,141 @@ public class TerritoriesMap implements Serializable {
 	
 	/**
 	 * Adds a territory and with a given team.
-	 * @param territory
-	 * @param team
+	 * @param territory	Relevant territory.
+	 * @param team		Owning team.
 	 */
 	public void AddTerritory(Territory territory, Team team) {
 		OwnersMap.put(territory, team);
 		Territories.add(territory);
-	}
+	} // END AddTerritory
 	
 	/**
 	 * Adds a team.
-	 * @param team
+	 * @param team	Relevant team.
 	 */
 	public void AddTeam(Team team) {
 		Teams.add(team);
-	}
+	} // END AddTeam
 	
 	/**
-	 * Adds a connection line.
-	 * @param cLine
+	 * Adds a ConnectionLine.
+	 * @param cLine	Relevant ConnectionLine.
 	 */
 	public void AddConnectionLine(ConnectionLine cLine) {
 		Connections.add(cLine);
-	}
+	} // END AddConnectionLine
 	
 	/**
 	 * Changes a territories owner to a given team.
-	 * @param territory
-	 * @param team
+	 * @param territory	Relevant territory.
+	 * @param team		New team.
 	 */
 	public void SetTerritoriesTeam(Territory territory, Team team) {
 		OwnersMap.put(territory, team);
-	}
+	} // END SetTerritoriesTeam
 	
 	/**
 	 * Removes a territory.
-	 * @param territory
+	 * @param territory	Relevant territory.
 	 */
 	public void RemoveTerritory(Territory territory) {
 		OwnersMap.remove(territory);
 		Territories.remove(territory);
-	}
+	} // END RemoveTerritory
 	
 	/**
-	 * Removes a team. Will throw an exception if this team owns a territory.
-	 * @param team
-	 * @throws TerritoryException
+	 * Removes a team.
+	 * @param team					Relevant team.
+	 * @throws TerritoryException	If the given team still owns a territory.
 	 */
 	public void RemoveTeam(Team team) throws TerritoryException {
 		if (OwnersMap.containsValue(team)) {
 			throw new TerritoryException("This team owns territory, and cannot be deleted.");
 		}
 		Teams.remove(team);
-	}
+	} // END RemoveTeam
 	
 	/**
-	 * Removes a connection line.
-	 * @param cLine
+	 * Removes a ConnectionLine.
+	 * @param cLine	Relevant ConnectionLine.
 	 */
 	public void RemoveConnectionLine(ConnectionLine cLine) {
 		Connections.remove(cLine);
-	}
+	} // END RemoveConnectionLine
 	
 	/**
 	 * Gives the number of teams.
-	 * @return
+	 * @return	Aforementioned query result.
 	 */
 	public int GetAmountOfTeams() {
 		return Teams.size();
-	}
+	} // END GetAmountOfTeams
 	
 	/**
 	 * Gives the number of territories.
-	 * @return
+	 * @return	Aforementioned query result.
 	 */
 	public int GetAmountOfTerritories() {
 		return Territories.size();
-	}
+	} // END GetAmountOfTerritories
 	
 	/**
 	 * Gives the number of connection lines.
-	 * @return
+	 * @return	Aforementioned query result.
 	 */
 	public int GetAmountOfConnectionLines() {
 		return Connections.size();
-	}
+	} // END GetAmountOfConnectionLines
 	
 	/**
 	 * Gives the team at an index.
-	 * @param index
-	 * @return
+	 * @param index	Relevant query index.
+	 * @return		Team at said index.
 	 */
 	public Team GetTeam(int index) {
 		return Teams.get(index);
-	}
+	} // END GetTeam
 	
 	/**
 	 * Gives the territory at an index.
-	 * @param index
-	 * @return
+	 * @param index	Relevant query index.
+	 * @return		Territory at said index.
 	 */
 	public Territory GetTerritory(int index) {
 		return Territories.get(index);
-	}
+	} // END GetTerritory
 	
 	/**
-	 * Checks if a team exists within the this territories map.
-	 * @param team
-	 * @return
+	 * Checks if a team exists within the this TerritoriesMap.
+	 * @param team	Relevant query team.
+	 * @return		Boolean representation of aforementioned logic.
 	 */
 	public Boolean TeamExists(Team team) {
 		return Teams.contains(team);
-	}
+	} // END TeamExists
 	
 	/**
-	 * Checks if a territory exists within this territories map.
-	 * @param territory
-	 * @return
+	 * Checks if a territory exists within this TerritoriesMap.
+	 * @param territory	Relevant query territory.
+	 * @return			Boolean representation of aforementioned logic.
 	 */
 	public Boolean TerritoryExists(Territory territory) {
 		return Territories.contains(territory);
-	}
+	} // END TerritoryExists
 	
 	/**
-	 * Checks if a connection line exists within this territories map.
-	 * @param cLine
-	 * @return
+	 * Checks if a ConnectionLine exists within this TerritoriesMap.
+	 * @param cLine	Relevant query ConnectionLine.
+	 * @return		Boolean representation of aforementioned logic.
 	 */
 	public Boolean ConnectionLineExists(ConnectionLine cLine) {
 		return Connections.contains(cLine);
-	}
+	} // END ConnectionLineExists
 	
 	/**
 	 * Gets the owner of a given territory.
-	 * @param territory
-	 * @return
+	 * @param territory	Relevant query territory.
+	 * @return			Owning team.
 	 */
 	public Team GetTerritoryOwner(Territory territory) {
 		if (OwnersMap.containsKey(territory)) {
@@ -187,12 +188,12 @@ public class TerritoriesMap implements Serializable {
 		} else {
 			return null;
 		}
-	}
+	} // END GetTerritoryOwner
 	
 	/**
 	 * Gets the territories of a given team.
-	 * @param team
-	 * @return
+	 * @param team	Relevant query team.
+	 * @return		List of aforementioned territories.
 	 */
 	public ArrayList<Territory> GetOwnedTerritories(Team team) {
 		ArrayList<Territory> returnValue = new ArrayList<Territory>();
@@ -202,11 +203,11 @@ public class TerritoriesMap implements Serializable {
 			}
 		}
 		return returnValue;
-	}
+	} // END GetOwnedTerritories
 	
 	/**
-	 * Gives an unbounded territories within this territories map.
-	 * @return
+	 * Gives an unbounded territories within this TerritoriesMap.
+	 * @return	List of aforementioned territories.
 	 */
 	public ArrayList<Territory> GetUnboundedTerritories() {
 		ArrayList<Territory> returnValue = new ArrayList<Territory>();
@@ -216,23 +217,26 @@ public class TerritoriesMap implements Serializable {
 			}
 		}
 		return returnValue;
-	}
+	} // END GetUnboundedTerritories
 	
 	/**
-	 * Checks if there are any unbounded territories in this territories map.
-	 * @return
+	 * Checks if there are any unbounded territories in this TerritoriesMap.
+	 * @return	Boolean representation of aforementioned logic.
 	 */
 	public Boolean HasUnboundedTerritories() {
 		return !GetUnboundedTerritories().isEmpty();
-	}
+	} // END HasUnboundedTerritories
 	
 	/**
-	 * Renders this territories map on top of a given base map.
-	 * @param inputFilename		file name of the base map.
-	 * @param outputFilename	file name of the output map.
-	 * @throws IOException		if an error occurred in the reading/writing process.
+	 * Renders this TerritoriesMap on top of a given base map.
+	 * @param inputFilename		File name of the base map.
+	 * @param outputFilename	File name of the output map.
+	 * @throws IOException		If an error occurred in the reading/writing process.
 	 */
 	public void Draw(String inputFilename, String outputFilename) throws IOException {
+		// start a temporary list of ConnectionLines to be used as containers for wrapping circles
+		ArrayList<ConnectionLine> wrappingCircles = new ArrayList<ConnectionLine>();
+		
 		// read in
 		BufferedImage storedImage = ImageIO.read(new File(inputFilename));
 		Graphics2D imageManipulator = storedImage.createGraphics();
@@ -260,11 +264,47 @@ public class TerritoriesMap implements Serializable {
 			}
 		}
 		
-		// draw connections last
+		// draw the connecting lines
 		imageManipulator.setColor(Color.GRAY);
 		for (int i = 0; i < Connections.size(); i++) {
 			ConnectionLine currentLine = Connections.get(i);
-			imageManipulator.drawLine(currentLine.X1, currentLine.Y1, currentLine.X2, currentLine.Y2);
+			if (currentLine.Wrapping) {
+				// find slope of the lines
+				final float length = 15;
+				double deltaX = (double)(currentLine.X2 - currentLine.X1);
+				double deltaY = (double)(currentLine.Y2 - currentLine.Y1);
+				
+				double reactiveX = (length * deltaX) / Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
+				double reactiveY = (length * deltaY) / Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
+				
+				imageManipulator.drawLine(currentLine.X1, currentLine.Y1,
+						currentLine.X1 - (int)reactiveX, currentLine.Y1 - (int)reactiveY);
+				imageManipulator.drawLine(currentLine.X2, currentLine.Y2,
+						currentLine.X2 + (int)reactiveX, currentLine.Y2 + (int)reactiveY);
+				
+				wrappingCircles.add(new ConnectionLine(
+						currentLine.X1 - (int)reactiveX, currentLine.Y1 - (int)reactiveY,
+						currentLine.X2 + (int)reactiveX, currentLine.Y2 + (int)reactiveY));
+			} else {
+				imageManipulator.drawLine(currentLine.X1, currentLine.Y1, currentLine.X2, currentLine.Y2);
+			}
+		}
+		
+		//draw the circular hubs
+		for (int i = 0; i < wrappingCircles.size(); i++) {
+			ConnectionLine cLine = wrappingCircles.get(i);
+			Shape circle1 = new Ellipse2D.Double(cLine.X1 - 5, cLine.Y1 - 5, 10, 10);
+			Shape circle2 = new Ellipse2D.Double(cLine.X2 - 5, cLine.Y2 - 5, 10, 10);
+			
+			// fill circles
+			imageManipulator.setColor(Color.getHSBColor(((float)i/wrappingCircles.size()), 1.0f, 1.0f));
+			imageManipulator.fill(circle1);
+			imageManipulator.fill(circle2);
+			
+			// draw circles		
+			imageManipulator.setColor(Color.GRAY);
+			imageManipulator.draw(circle1);
+			imageManipulator.draw(circle2);
 		}
 		
 		// render
@@ -275,8 +315,8 @@ public class TerritoriesMap implements Serializable {
 	
 	/**
 	 * Serializes this map to a specified file.
-	 * @param outputFilename	name of the output file.
-	 * @throws IOException		if an error occurred in the reading/writing process.
+	 * @param outputFilename	Name of the output file.
+	 * @throws IOException		If an error occurred in the reading/writing process.
 	 */
 	public void Serialize(String outputFilename) throws IOException {
 		FileOutputStream fileOut = new FileOutputStream(outputFilename);
@@ -288,10 +328,10 @@ public class TerritoriesMap implements Serializable {
 	
 	/**
 	 * Deserializes and returns a TerritoriesMap object of the specified file.
-	 * @param inputFilename				name of the input file.
-	 * @return							the object read in.
-	 * @throws IOException				if an error occurred in the reading/writing process.
-	 * @throws ClassNotFoundException	if no definition of this class has been found in the file.
+	 * @param inputFilename				Name of the input file.
+	 * @return							The object read in.
+	 * @throws IOException				If an error occurred in the reading/writing process.
+	 * @throws ClassNotFoundException	If no definition of this class has been found in the file.
 	 */
 	public static TerritoriesMap Deserialize(String inputFilename) throws IOException, ClassNotFoundException {
 		FileInputStream fileIn = new FileInputStream(inputFilename);
@@ -302,6 +342,6 @@ public class TerritoriesMap implements Serializable {
 		return returnValue;
 	} // END Deserialize
 	
-	/** Serialization version as of 11/24/2013 **/
+	/** Serialization version as of last update **/
 	private static final long serialVersionUID = 2L;
 }

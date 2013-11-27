@@ -6,10 +6,14 @@ import org.urbangaming.territories.core.*;
 /**
  * This is the temporary class that will manually write all of the given map data to a file.
  * @author Andrew Lopreiato
- * @version 1.1 11/14/13
+ * @version 1.2 11/26/13
  */
 public class Driver {
 
+	// CONSTANTS
+	public static final String SAVE_FILE = "Fall2013.trmp";
+	// END CONSTANTS
+	
 	/**
 	 * The main running method.
 	 * @param args No options available.
@@ -30,7 +34,7 @@ public class Driver {
 		// Serialize the map
 		try {
 			System.out.println("Saving map...");
-			territoriesFallMap.Serialize("Fall2013.trmap");
+			territoriesFallMap.Serialize(SAVE_FILE);
 			System.out.println("Map Saved.");
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -40,7 +44,7 @@ public class Driver {
 
 	/**
 	 * Hard coded method to populate the territories. All territories default to the team in 0.
-	 * @param list List to populate to.
+	 * @param list	List to populate to.
 	 */
 	private static void PopulateTerritoryList(TerritoriesMap tMap) {
 		Polygon tempPoly = null;
@@ -392,7 +396,7 @@ public class Driver {
 	
 	/**
 	 * Hard coded method to populate the teams.
-	 * @param list List to populate to.
+	 * @param list	List to populate to.
 	 */
 	private static void PopulateTeamList(TerritoriesMap tMap) {
 		int transparency = 180;
@@ -406,7 +410,7 @@ public class Driver {
 	
 	/**
 	 * Hard coded method to populate the connections.
-	 * @param list List to populate to.
+	 * @param list	List to populate to.
 	 */
 	private static void PopulateConnectionList(TerritoriesMap tMap) {
 		// Business to Forest Resources
@@ -515,16 +519,10 @@ public class Driver {
 		tMap.AddConnectionLine(new ConnectionLine(188, 446, 84, 416));
 
 		// East Quad WRAPS Lion Shrine
-		tMap.AddConnectionLine(new ConnectionLine(191, 244, 0, 202));
-		tMap.AddConnectionLine(new ConnectionLine(773, 160, 857, 202));
-		
+		tMap.AddConnectionLine(new ConnectionLine(191, 244, 773, 160, true));
 		// Eastview WRAPS Leonhard
-		tMap.AddConnectionLine(new ConnectionLine(827, 457, 857, 432));
-		tMap.AddConnectionLine(new ConnectionLine(50, 407, 0, 432));
-		
+		tMap.AddConnectionLine(new ConnectionLine(827, 457, 50, 407, true));
 		// North Forest WRAPS South Old Main
-		tMap.AddConnectionLine(new ConnectionLine(420, 131, 420, 0));
-		tMap.AddConnectionLine(new ConnectionLine(420, 532, 420, 523));
-		
+		tMap.AddConnectionLine(new ConnectionLine(420, 131, 420, 523, true));
 	} // END PopulateConnectionList
 } // END MainDriver

@@ -14,7 +14,7 @@ import java.io.FilenameFilter;
  * interface. The action buttons are the buttons that allow the user to load a map file, save map file changes, and
  * draw the edited data from the map file onto an image.
  * @author Andrew Lopreiato
- * @version 1.0 11/23/23
+ * @version 1.1 11/26/23
  */
 public class ActionButtonsPanel extends Panel {
 	
@@ -26,8 +26,8 @@ public class ActionButtonsPanel extends Panel {
 	private String OutputImageDirectory = "";
 	private FileDialog FileDialog = null;
 	private ActionListener UpdateAction = null;
-	private static final String MAP_FILE_ENDING = ".trmap";
-	private static final long serialVersionUID = 1L;
+	private static final String MAP_FILE_ENDING = ".trmp";
+	private static final long serialVersionUID = 2L;
 	// END DATA MEMBERS
 	
 	/**
@@ -61,7 +61,6 @@ public class ActionButtonsPanel extends Panel {
 			if (event.getSource().equals(OpenButton)) {
 				FileDialog.setMode(java.awt.FileDialog.LOAD);
 				FileDialog.setTitle("Choose a map");
-				FileDialog.setDirectory(DataDirectory);
 				FileDialog.setEnabled(true);
 				FileDialog.setVisible(true);
 				DataDirectory = FileDialog.getDirectory() + FileDialog.getFile();

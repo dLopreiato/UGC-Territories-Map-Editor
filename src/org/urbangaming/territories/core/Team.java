@@ -17,7 +17,7 @@ public class Team implements Serializable {
 	
 	/**
 	 * Constructs a team with a black color, and no territories.
-	 * @param name The name of the team.
+	 * @param name	The name of the team.
 	 */
 	public Team(String name) {
 		Name = name;
@@ -26,8 +26,8 @@ public class Team implements Serializable {
 	
 	/**
 	 * Constructs a team with no territories.
-	 * @param name The name of the team.
-	 * @param color The color of the team.
+	 * @param name	The name of the team.
+	 * @param color	The color of the team.
 	 */
 	public Team(String name, Color color) {
 		Name = name;
