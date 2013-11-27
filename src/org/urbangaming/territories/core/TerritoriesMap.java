@@ -23,7 +23,7 @@ import javax.imageio.ImageIO;
  * and connections between territories. Serialization has also been written into the class, making reading and writing
  * to disk easy.
  * @author Andrew Lopreiato
-// * @version 1.2 11/26/13
+ * @version 1.2 11/26/13
  */
 public class TerritoriesMap implements Serializable {
 	

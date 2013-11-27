@@ -14,7 +14,7 @@ import java.io.FilenameFilter;
  * interface. The action buttons are the buttons that allow the user to load a map file, save map file changes, and
  * draw the edited data from the map file onto an image.
  * @author Andrew Lopreiato
- * @version 1.1 11/26/23
+ * @version 1.1.1 11/27/23
  */
 public class ActionButtonsPanel extends Panel {
 	
@@ -23,7 +23,9 @@ public class ActionButtonsPanel extends Panel {
 	private Button SaveButton = null;
 	private Button DrawButton = null;
 	private String DataDirectory = "";
+	private String DataFile = "";
 	private String OutputImageDirectory = "";
+	private String OutputImageFile = "";
 	private FileDialog FileDialog = null;
 	private ActionListener UpdateAction = null;
 	private static final String MAP_FILE_ENDING = ".trmp";
@@ -63,28 +65,39 @@ public class ActionButtonsPanel extends Panel {
 				FileDialog.setTitle("Choose a map");
 				FileDialog.setEnabled(true);
 				FileDialog.setVisible(true);
-				DataDirectory = FileDialog.getDirectory() + FileDialog.getFile();
-				UpdateAction.actionPerformed(new ActionEvent(this, 0, "LOAD"));
+				if (FileDialog.getFile() != null) { //only continue on if a file was actually selected
+					DataDirectory = FileDialog.getDirectory();
+					DataFile = FileDialog.getFile();
+					UpdateAction.actionPerformed(new ActionEvent(this, 0, "LOAD"));
+				}
 			}
 			
 			if (event.getSource().equals(SaveButton)) {
 				FileDialog.setMode(java.awt.FileDialog.SAVE);
 				FileDialog.setTitle("Save this map");
 				FileDialog.setDirectory(DataDirectory);
+				FileDialog.setFile(DataFile);
 				FileDialog.setEnabled(true);
 				FileDialog.setVisible(true);
-				DataDirectory = FileDialog.getDirectory() + FileDialog.getFile();
-				UpdateAction.actionPerformed(new ActionEvent(this, 1, "SAVE"));
+				if (FileDialog.getFile() != null) { //Only continue on if a file was actually selected
+					DataDirectory = FileDialog.getDirectory();
+					DataFile = FileDialog.getFile();
+					UpdateAction.actionPerformed(new ActionEvent(this, 1, "SAVE"));
+				}
 			}
 			
 			if (event.getSource().equals(DrawButton)) {
 				FileDialog.setMode(java.awt.FileDialog.SAVE);
 				FileDialog.setTitle("Draw this map");
 				FileDialog.setDirectory(OutputImageDirectory);
+				FileDialog.setFile(OutputImageFile);
 				FileDialog.setEnabled(true);
 				FileDialog.setVisible(true);
-				OutputImageDirectory = FileDialog.getDirectory() + FileDialog.getFile();
-				UpdateAction.actionPerformed(new ActionEvent(this, 2, "DRAW"));
+				if (FileDialog.getFile() != null) { //Only continue on if a file was actually selected
+					OutputImageDirectory = FileDialog.getDirectory();
+					OutputImageFile = FileDialog.getFile();
+					UpdateAction.actionPerformed(new ActionEvent(this, 2, "DRAW"));
+				}
 			}
 		}
 	} // END ActionButtonEvent
@@ -111,19 +124,19 @@ public class ActionButtonsPanel extends Panel {
 	} // END SetAction
 	
 	/**
-	 * Gives the directory for the territories map file.
-	 * @return String containing directory.
+	 * Gives the path for the territories map file.
+	 * @return String containing path.
 	 */
-	public String GetDataDirectory() {
-		return DataDirectory;
+	public String GetDataPath() {
+		return DataDirectory + DataFile;
 	} // END GetDataDirectory
 	
 	/**
-	 * Gives the directory for the processed image file.
-	 * @return String containing directory.
+	 * Gives the path for the processed image file.
+	 * @return String containing path.
 	 */
-	public String GetImageDirectory() {
-		return OutputImageDirectory;
+	public String GetImagePath() {
+		return OutputImageDirectory + OutputImageFile;
 	} // END GetImageDirectory
 	
 } // END ActionButtonsPanel

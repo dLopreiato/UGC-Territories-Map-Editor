@@ -78,7 +78,7 @@ public class Driver {
 				}
 				// Serialize map
 				try {
-					TerritoriesMap.Serialize(ActionPanel.GetDataDirectory());
+					TerritoriesMap.Serialize(ActionPanel.GetDataPath());
 				} catch (Exception ex) {
 					System.out.println(ex.getLocalizedMessage());
 				}
@@ -87,7 +87,7 @@ public class Driver {
 			if (e.getActionCommand().equals("LOAD")) {
 				try {
 					TerritoriesMap = 
-							org.urbangaming.territories.core.TerritoriesMap.Deserialize(ActionPanel.GetDataDirectory());
+							org.urbangaming.territories.core.TerritoriesMap.Deserialize(ActionPanel.GetDataPath());
 					TerritoriesPanel.UpdateOptionsChoices(TerritoriesMap);
 					OSWindow.validate();
 				} catch (Exception ex) {
@@ -104,7 +104,7 @@ public class Driver {
 					
 					// Draw
 					try {
-						TerritoriesMap.Draw("BaseMap.png", ActionPanel.GetImageDirectory());
+						TerritoriesMap.Draw("BaseMap.png", ActionPanel.GetImagePath());
 					} catch (Exception ex) {
 						System.out.println(ex.getLocalizedMessage());
 					}
