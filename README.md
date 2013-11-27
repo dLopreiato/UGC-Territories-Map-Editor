@@ -1,6 +1,6 @@
-Territories Map Editor
-==========================
-A project for the Penn State Urban Gaming Club
+# Territories Map Editor #
+#### A project for the Penn State Urban Gaming Club ####
+
 ---------------------------
 
 ### Who is this for? ###
