@@ -1,27 +1,27 @@
 package org.urbangaming.territories.client;
-import java.awt.Button;
 import java.awt.FileDialog;
 import java.awt.FlowLayout;
 import java.awt.Frame;
-import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FilenameFilter;
+import javax.swing.JButton;
+import javax.swing.JPanel;
 
 /**
  * Isolates all of the data and behavior that would be seen in the action buttons portion of the main user
  * interface. The action buttons are the buttons that allow the user to load a map file, save map file changes, and
  * draw the edited data from the map file onto an image.
  * @author Andrew Lopreiato
- * @version 1.1.1 11/27/23
+ * @version 1.2 12/1/23
  */
-public class ActionButtonsPanel extends Panel {
+public class ActionButtonsPanel extends JPanel {
 	
 	// DATA MEMBERS
-	private Button OpenButton = null;
-	private Button SaveButton = null;
-	private Button DrawButton = null;
+	private JButton OpenButton = null;
+	private JButton SaveButton = null;
+	private JButton DrawButton = null;
 	private String DataDirectory = "";
 	private String DataFile = "";
 	private String OutputImageDirectory = "";
@@ -29,7 +29,7 @@ public class ActionButtonsPanel extends Panel {
 	private FileDialog FileDialog = null;
 	private ActionListener UpdateAction = null;
 	private static final String MAP_FILE_ENDING = ".trmp";
-	private static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 3L;
 	// END DATA MEMBERS
 	
 	/**
@@ -40,9 +40,9 @@ public class ActionButtonsPanel extends Panel {
 	ActionButtonsPanel(Frame parentFrame, ActionListener updateAction) {
 		this.UpdateAction = updateAction;
 		this.setLayout(new FlowLayout());
-		OpenButton = new Button("Open");
-		SaveButton = new Button("Save");
-		DrawButton = new Button("Draw");
+		OpenButton = new JButton("Open");
+		SaveButton = new JButton("Save");
+		DrawButton = new JButton("Draw");
 		this.add(OpenButton);
 		this.add(SaveButton);
 		this.add(DrawButton);

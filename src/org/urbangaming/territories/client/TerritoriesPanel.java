@@ -1,22 +1,22 @@
 package org.urbangaming.territories.client;
 import org.urbangaming.territories.core.TerritoriesMap;
-import java.awt.Choice;
 import java.awt.GridLayout;
-import java.awt.Label;
-import java.awt.Panel;
 import java.util.ArrayList;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 /**
  * Isolates all of the data and behavior that would be seen in the owner list portion of the main user interface. The
  * owner list is the series of names with choices next to them to allow a user to edit the territory's owner.
  * @author Andrew Lopreiato
- * @version 1.1 11/24/2013
+ * @version 1.2 12/1/2013
  */
-public class TerritoriesPanel extends Panel {
+public class TerritoriesPanel extends JPanel {
 	
 	// DATA MEMBERS
-	private ArrayList<Choice> ChoiceList = null;
-	private static final long serialVersionUID = 2L;
+	private ArrayList<JComboBox<String>> ChoiceList = null;
+	private static final long serialVersionUID = 3L;
 	// END DATA MEMBERS
 
 	/**
@@ -38,24 +38,24 @@ public class TerritoriesPanel extends Panel {
 		this.setLayout(customGrid);
 		if (map == null)
 			return; // if its null, don't add anything
-		ChoiceList = new ArrayList<Choice>(map.GetAmountOfTerritories());
+		ChoiceList = new ArrayList<JComboBox<String>>(map.GetAmountOfTerritories());
 		customGrid.setRows(map.GetAmountOfTerritories());
 		// for each territory in the territory manifest
 		for (int i = 0; i < map.GetAmountOfTerritories(); i++) {
 			// add the territory name to the panel
-			this.add(new Label(map.GetTerritory(i).Name));
+			this.add(new JLabel(map.GetTerritory(i).Name));
 			
 			// Create a new set of choices
-			Choice territoryChoice = new Choice();
+			JComboBox<String> territoryChoice = new JComboBox<String>();
 			// for each team in the team manifest
 			for (int j = 0; j < map.GetAmountOfTeams(); j++) {
 				// add the possible teams as choices
-				territoryChoice.add(map.GetTeam(j).Name);
+				territoryChoice.addItem(map.GetTeam(j).Name);
 				
 				// if this territory is owned by relevant team
 				if (map.GetTerritoryOwner(map.GetTerritory(i)).equals(map.GetTeam(j))) {
 					// show this team as the selected team
-					territoryChoice.select(j);
+					territoryChoice.setSelectedIndex(j);
 				}
 			}
 			
