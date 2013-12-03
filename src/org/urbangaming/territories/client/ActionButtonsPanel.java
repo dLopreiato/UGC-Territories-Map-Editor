@@ -19,15 +19,15 @@ import javax.swing.JPanel;
 public class ActionButtonsPanel extends JPanel {
 	
 	// DATA MEMBERS
-	private JButton OpenButton = null;
-	private JButton SaveButton = null;
-	private JButton DrawButton = null;
-	private String DataDirectory = "";
-	private String DataFile = "";
-	private String OutputImageDirectory = "";
-	private String OutputImageFile = "";
-	private FileDialog FileDialog = null;
-	private ActionListener UpdateAction = null;
+	private JButton OpenButton_ = null;
+	private JButton SaveButton_ = null;
+	private JButton DrawButton_ = null;
+	private String DataDirectory_ = "";
+	private String DataFile_ = "";
+	private String OutputImageDirectory_ = "";
+	private String OutputImageFile_ = "";
+	private FileDialog FileDialog_ = null;
+	private ActionListener UpdateAction_ = null;
 	private static final String MAP_FILE_ENDING = ".trmp";
 	private static final long serialVersionUID = 3L;
 	// END DATA MEMBERS
@@ -38,65 +38,65 @@ public class ActionButtonsPanel extends JPanel {
 	 * @param updateAction The action listener to be informed when a button asks for a process.
 	 */
 	ActionButtonsPanel(Frame parentFrame, ActionListener updateAction) {
-		this.UpdateAction = updateAction;
+		this.UpdateAction_ = updateAction;
 		this.setLayout(new FlowLayout());
-		OpenButton = new JButton("Open");
-		SaveButton = new JButton("Save");
-		DrawButton = new JButton("Draw");
-		this.add(OpenButton);
-		this.add(SaveButton);
-		this.add(DrawButton);
-		FileDialog = new FileDialog(parentFrame);
-		FileDialog.setFilenameFilter(new TerritoriesMapFileFilter());
-		FileDialog.setMultipleMode(false);
-		FileDialog.setAlwaysOnTop(true);
-		FileDialog.setVisible(false);
-		FileDialog.setEnabled(false);
+		OpenButton_ = new JButton("Open");
+		SaveButton_ = new JButton("Save");
+		DrawButton_ = new JButton("Draw");
+		this.add(OpenButton_);
+		this.add(SaveButton_);
+		this.add(DrawButton_);
+		FileDialog_ = new FileDialog(parentFrame);
+		FileDialog_.setFilenameFilter(new TerritoriesMapFileFilter());
+		FileDialog_.setMultipleMode(false);
+		FileDialog_.setAlwaysOnTop(true);
+		FileDialog_.setVisible(false);
+		FileDialog_.setEnabled(false);
 		
-		OpenButton.addActionListener(new ActionButtonEvent());
-		SaveButton.addActionListener(new ActionButtonEvent());
-		DrawButton.addActionListener(new ActionButtonEvent());
+		OpenButton_.addActionListener(new ActionButtonEvent());
+		SaveButton_.addActionListener(new ActionButtonEvent());
+		DrawButton_.addActionListener(new ActionButtonEvent());
 	} // END ActionButtonsPanel
 	
 	private class ActionButtonEvent implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
-			if (event.getSource().equals(OpenButton)) {
-				FileDialog.setMode(java.awt.FileDialog.LOAD);
-				FileDialog.setTitle("Choose a map");
-				FileDialog.setEnabled(true);
-				FileDialog.setVisible(true);
-				if (FileDialog.getFile() != null) { //only continue on if a file was actually selected
-					DataDirectory = FileDialog.getDirectory();
-					DataFile = FileDialog.getFile();
-					UpdateAction.actionPerformed(new ActionEvent(this, 0, "LOAD"));
+			if (event.getSource().equals(OpenButton_)) {
+				FileDialog_.setMode(java.awt.FileDialog.LOAD);
+				FileDialog_.setTitle("Choose a map");
+				FileDialog_.setEnabled(true);
+				FileDialog_.setVisible(true);
+				if (FileDialog_.getFile() != null) { //only continue on if a file was actually selected
+					DataDirectory_ = FileDialog_.getDirectory();
+					DataFile_ = FileDialog_.getFile();
+					UpdateAction_.actionPerformed(new ActionEvent(this, 0, "LOAD"));
 				}
 			}
 			
-			if (event.getSource().equals(SaveButton)) {
-				FileDialog.setMode(java.awt.FileDialog.SAVE);
-				FileDialog.setTitle("Save this map");
-				FileDialog.setDirectory(DataDirectory);
-				FileDialog.setFile(DataFile);
-				FileDialog.setEnabled(true);
-				FileDialog.setVisible(true);
-				if (FileDialog.getFile() != null) { //Only continue on if a file was actually selected
-					DataDirectory = FileDialog.getDirectory();
-					DataFile = FileDialog.getFile();
-					UpdateAction.actionPerformed(new ActionEvent(this, 1, "SAVE"));
+			if (event.getSource().equals(SaveButton_)) {
+				FileDialog_.setMode(java.awt.FileDialog.SAVE);
+				FileDialog_.setTitle("Save this map");
+				FileDialog_.setDirectory(DataDirectory_);
+				FileDialog_.setFile(DataFile_);
+				FileDialog_.setEnabled(true);
+				FileDialog_.setVisible(true);
+				if (FileDialog_.getFile() != null) { //Only continue on if a file was actually selected
+					DataDirectory_ = FileDialog_.getDirectory();
+					DataFile_ = FileDialog_.getFile();
+					UpdateAction_.actionPerformed(new ActionEvent(this, 1, "SAVE"));
 				}
 			}
 			
-			if (event.getSource().equals(DrawButton)) {
-				FileDialog.setMode(java.awt.FileDialog.SAVE);
-				FileDialog.setTitle("Draw this map");
-				FileDialog.setDirectory(OutputImageDirectory);
-				FileDialog.setFile(OutputImageFile);
-				FileDialog.setEnabled(true);
-				FileDialog.setVisible(true);
-				if (FileDialog.getFile() != null) { //Only continue on if a file was actually selected
-					OutputImageDirectory = FileDialog.getDirectory();
-					OutputImageFile = FileDialog.getFile();
-					UpdateAction.actionPerformed(new ActionEvent(this, 2, "DRAW"));
+			if (event.getSource().equals(DrawButton_)) {
+				FileDialog_.setMode(java.awt.FileDialog.SAVE);
+				FileDialog_.setTitle("Draw this map");
+				FileDialog_.setDirectory(OutputImageDirectory_);
+				FileDialog_.setFile(OutputImageFile_);
+				FileDialog_.setEnabled(true);
+				FileDialog_.setVisible(true);
+				if (FileDialog_.getFile() != null) { //Only continue on if a file was actually selected
+					OutputImageDirectory_ = FileDialog_.getDirectory();
+					OutputImageFile_ = FileDialog_.getFile();
+					UpdateAction_.actionPerformed(new ActionEvent(this, 2, "DRAW"));
 				}
 			}
 		}
@@ -120,7 +120,7 @@ public class ActionButtonsPanel extends JPanel {
 	 * @param listener The action.
 	 */
 	public void SetAction(ActionListener listener) {
-		UpdateAction = listener;
+		UpdateAction_ = listener;
 	} // END SetAction
 	
 	/**
@@ -128,7 +128,7 @@ public class ActionButtonsPanel extends JPanel {
 	 * @return String containing path.
 	 */
 	public String GetDataPath() {
-		return DataDirectory + DataFile;
+		return DataDirectory_ + DataFile_;
 	} // END GetDataDirectory
 	
 	/**
@@ -136,7 +136,7 @@ public class ActionButtonsPanel extends JPanel {
 	 * @return String containing path.
 	 */
 	public String GetImagePath() {
-		return OutputImageDirectory + OutputImageFile;
+		return OutputImageDirectory_ + OutputImageFile_;
 	} // END GetImageDirectory
 	
 } // END ActionButtonsPanel

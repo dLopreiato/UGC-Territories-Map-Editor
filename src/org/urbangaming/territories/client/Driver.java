@@ -18,10 +18,12 @@ import javax.swing.WindowConstants;
  */
 public class Driver {
 	// DATA MEMBERS
-	private static TerritoriesMap TerritoriesMap = null;
-	private static TerritoriesPanel TerritoriesPanel = null;
-	private static ActionButtonsPanel ActionPanel = null;
-	private static JFrame OSWindow = null;
+	private static TerritoriesMap TerritoriesMap_ = null;
+	private static TerritoriesPanel TerritoriesPanel_ = null;
+	private static ActionButtonsPanel ActionPanel_ = null;
+	private static JFrame OSWindow_ = null;
+	private static JScrollPane TerritoryScrollPane_ = null;
+	private static JPanel SuperPanel_ = null;
 	// END DATA MEMBERS
 	
 	/**
@@ -30,30 +32,30 @@ public class Driver {
 	 */
 	public static void main(String[] args) {
 		// Create the main window frame
-		OSWindow = new JFrame();
-		OSWindow.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		OSWindow.setLocation(0,0);
-		OSWindow.setSize(640, 480);
-		OSWindow.setTitle("Territories Admin Menu");
+		OSWindow_ = new JFrame();
+		OSWindow_.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		OSWindow_.setLocation(0,0);
+		OSWindow_.setSize(640, 480);
+		OSWindow_.setTitle("Territories Admin Menu");
 		
 		// create the highest container panel
-		JPanel superPanel = new JPanel(new BorderLayout());
-		OSWindow.add(superPanel);
+		SuperPanel_ = new JPanel(new BorderLayout());
+		OSWindow_.add(SuperPanel_);
 		
 		// create and insert action panel
-		ActionPanel = new ActionButtonsPanel(OSWindow, new ActionPanelListener()); 
-		superPanel.add(ActionPanel, BorderLayout.SOUTH);
+		ActionPanel_ = new ActionButtonsPanel(OSWindow_, new ActionPanelListener()); 
+		SuperPanel_.add(ActionPanel_, BorderLayout.SOUTH);
 		
 		// Create the list jscrollpane
-		JScrollPane territoryScrollPane = new JScrollPane();
-		superPanel.add(territoryScrollPane, BorderLayout.CENTER);
+		TerritoryScrollPane_ = new JScrollPane();
+		SuperPanel_.add(TerritoryScrollPane_, BorderLayout.CENTER);
 		
 		// Create the territories panel
-		TerritoriesPanel = new TerritoriesPanel();
-		territoryScrollPane.setViewportView(TerritoriesPanel);
+		TerritoriesPanel_ = new TerritoriesPanel();
+		TerritoryScrollPane_.setViewportView(TerritoriesPanel_);
 		
 		// Should be last thing to do, to ensure no screen changes are visible
-		OSWindow.setVisible(true);
+		OSWindow_.setVisible(true);
 	} // END main
 	
 	/**
@@ -61,39 +63,39 @@ public class Driver {
 	 */
 	private static class ActionPanelListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			OSWindow.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+			OSWindow_.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			try {
 				if (e.getActionCommand().equals("SAVE")) {
 					//Update map 
-					for (int i = 0; i < TerritoriesMap.GetAmountOfTerritories(); i++) {
-							TerritoriesMap.SetTerritoriesTeam(TerritoriesMap.GetTerritory(i),
-							TerritoriesMap.GetTeam(TerritoriesPanel.ChoiceForIndex(i)));
+					for (int i = 0; i < TerritoriesMap_.GetAmountOfTerritories(); i++) {
+							TerritoriesMap_.SetTerritoriesTeam(TerritoriesMap_.GetTerritory(i),
+							TerritoriesMap_.GetTeam(TerritoriesPanel_.ChoiceForIndex(i)));
 					}
 					// Serialize map
-					TerritoriesMap.Serialize(ActionPanel.GetDataPath());
+					TerritoriesMap_.Serialize(ActionPanel_.GetDataPath());
 				}
 				if (e.getActionCommand().equals("LOAD")) {
-					TerritoriesMap = 
-							org.urbangaming.territories.core.TerritoriesMap.Deserialize(ActionPanel.GetDataPath());
-					TerritoriesPanel.UpdateOptionsChoices(TerritoriesMap);
-					OSWindow.validate();
+					TerritoriesMap_ = 
+							org.urbangaming.territories.core.TerritoriesMap.Deserialize(ActionPanel_.GetDataPath());
+					TerritoriesPanel_.UpdateOptionsChoices(TerritoriesMap_);
+					OSWindow_.validate();
 				}
 				if (e.getActionCommand().equals("DRAW")) {
-					if (TerritoriesMap != null) {
+					if (TerritoriesMap_ != null) {
 						//Update map 
-						for (int i = 0; i < TerritoriesMap.GetAmountOfTerritories(); i++) {
-								TerritoriesMap.SetTerritoriesTeam(TerritoriesMap.GetTerritory(i),
-								TerritoriesMap.GetTeam(TerritoriesPanel.ChoiceForIndex(i)));
+						for (int i = 0; i < TerritoriesMap_.GetAmountOfTerritories(); i++) {
+								TerritoriesMap_.SetTerritoriesTeam(TerritoriesMap_.GetTerritory(i),
+								TerritoriesMap_.GetTeam(TerritoriesPanel_.ChoiceForIndex(i)));
 						}
 						
 						// Draw
-						TerritoriesMap.Draw("BaseMap.png", ActionPanel.GetImagePath());
+						TerritoriesMap_.Draw("BaseMap.png", ActionPanel_.GetImagePath());
 					}
 				}
 			} catch (Exception exception) {
-				JOptionPane.showMessageDialog(OSWindow, exception.getLocalizedMessage());
+				JOptionPane.showMessageDialog(OSWindow_, exception.getLocalizedMessage());
 			}
-			OSWindow.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+			OSWindow_.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		}
 	} // END ActionPanelListener	
 } // END MainDriver

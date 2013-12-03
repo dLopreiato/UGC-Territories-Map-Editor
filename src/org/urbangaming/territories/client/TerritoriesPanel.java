@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 public class TerritoriesPanel extends JPanel {
 	
 	// DATA MEMBERS
-	private ArrayList<JComboBox<String>> ChoiceList = null;
+	private ArrayList<JComboBox<String>> ChoiceList_ = null;
 	private static final long serialVersionUID = 3L;
 	// END DATA MEMBERS
 
@@ -38,7 +38,7 @@ public class TerritoriesPanel extends JPanel {
 		this.setLayout(customGrid);
 		if (map == null)
 			return; // if its null, don't add anything
-		ChoiceList = new ArrayList<JComboBox<String>>(map.GetAmountOfTerritories());
+		ChoiceList_ = new ArrayList<JComboBox<String>>(map.GetAmountOfTerritories());
 		customGrid.setRows(map.GetAmountOfTerritories());
 		// for each territory in the territory manifest
 		for (int i = 0; i < map.GetAmountOfTerritories(); i++) {
@@ -60,7 +60,7 @@ public class TerritoriesPanel extends JPanel {
 			}
 			
 			// add the choices to the list
-			ChoiceList.add(territoryChoice);
+			ChoiceList_.add(territoryChoice);
 			// add the choice to the panel
 			this.add(territoryChoice);
 		}
@@ -74,7 +74,7 @@ public class TerritoriesPanel extends JPanel {
 	 * @return It's given owner.
 	 */
 	public int ChoiceForIndex(int index) {
-		return ChoiceList.get(index).getSelectedIndex();
+		return ChoiceList_.get(index).getSelectedIndex();
 	} // END ChoiceForIndex
 	
 }

@@ -28,20 +28,20 @@ import javax.imageio.ImageIO;
 public class TerritoriesMap implements Serializable {
 	
 	// DATA MEMBERS
-	private ArrayList<Team> Teams;
-	private ArrayList<Territory> Territories;
-	private ArrayList<ConnectionLine> Connections;
-	private HashMap<Territory, Team> OwnersMap;
+	private ArrayList<Team> Teams_;
+	private ArrayList<Territory> Territories_;
+	private ArrayList<ConnectionLine> Connections_;
+	private HashMap<Territory, Team> OwnersMap_;
 	// END DATA MEMBERS
 
 	/**
 	 * Constructs a map with no territories, teams, or ConnectionLines.
 	 */
 	public TerritoriesMap() {	
-		Teams = new ArrayList<Team>();
-		Territories = new ArrayList<Territory>();
-		Connections = new ArrayList<ConnectionLine>();
-		OwnersMap = new HashMap<Territory, Team>();
+		Teams_ = new ArrayList<Team>();
+		Territories_ = new ArrayList<Territory>();
+		Connections_ = new ArrayList<ConnectionLine>();
+		OwnersMap_ = new HashMap<Territory, Team>();
 	} // END TerritoriesMap
 	
 	/**
@@ -50,8 +50,8 @@ public class TerritoriesMap implements Serializable {
 	 * @param team		Owning team.
 	 */
 	public void AddTerritory(Territory territory, Team team) {
-		OwnersMap.put(territory, team);
-		Territories.add(territory);
+		OwnersMap_.put(territory, team);
+		Territories_.add(territory);
 	} // END AddTerritory
 	
 	/**
@@ -59,7 +59,7 @@ public class TerritoriesMap implements Serializable {
 	 * @param team	Relevant team.
 	 */
 	public void AddTeam(Team team) {
-		Teams.add(team);
+		Teams_.add(team);
 	} // END AddTeam
 	
 	/**
@@ -67,7 +67,7 @@ public class TerritoriesMap implements Serializable {
 	 * @param cLine	Relevant ConnectionLine.
 	 */
 	public void AddConnectionLine(ConnectionLine cLine) {
-		Connections.add(cLine);
+		Connections_.add(cLine);
 	} // END AddConnectionLine
 	
 	/**
@@ -76,7 +76,7 @@ public class TerritoriesMap implements Serializable {
 	 * @param team		New team.
 	 */
 	public void SetTerritoriesTeam(Territory territory, Team team) {
-		OwnersMap.put(territory, team);
+		OwnersMap_.put(territory, team);
 	} // END SetTerritoriesTeam
 	
 	/**
@@ -84,8 +84,8 @@ public class TerritoriesMap implements Serializable {
 	 * @param territory	Relevant territory.
 	 */
 	public void RemoveTerritory(Territory territory) {
-		OwnersMap.remove(territory);
-		Territories.remove(territory);
+		OwnersMap_.remove(territory);
+		Territories_.remove(territory);
 	} // END RemoveTerritory
 	
 	/**
@@ -94,10 +94,10 @@ public class TerritoriesMap implements Serializable {
 	 * @throws TerritoryException	If the given team still owns a territory.
 	 */
 	public void RemoveTeam(Team team) throws TerritoryException {
-		if (OwnersMap.containsValue(team)) {
+		if (OwnersMap_.containsValue(team)) {
 			throw new TerritoryException("This team owns territory, and cannot be deleted.");
 		}
-		Teams.remove(team);
+		Teams_.remove(team);
 	} // END RemoveTeam
 	
 	/**
@@ -105,7 +105,7 @@ public class TerritoriesMap implements Serializable {
 	 * @param cLine	Relevant ConnectionLine.
 	 */
 	public void RemoveConnectionLine(ConnectionLine cLine) {
-		Connections.remove(cLine);
+		Connections_.remove(cLine);
 	} // END RemoveConnectionLine
 	
 	/**
@@ -113,7 +113,7 @@ public class TerritoriesMap implements Serializable {
 	 * @return	Aforementioned query result.
 	 */
 	public int GetAmountOfTeams() {
-		return Teams.size();
+		return Teams_.size();
 	} // END GetAmountOfTeams
 	
 	/**
@@ -121,7 +121,7 @@ public class TerritoriesMap implements Serializable {
 	 * @return	Aforementioned query result.
 	 */
 	public int GetAmountOfTerritories() {
-		return Territories.size();
+		return Territories_.size();
 	} // END GetAmountOfTerritories
 	
 	/**
@@ -129,7 +129,7 @@ public class TerritoriesMap implements Serializable {
 	 * @return	Aforementioned query result.
 	 */
 	public int GetAmountOfConnectionLines() {
-		return Connections.size();
+		return Connections_.size();
 	} // END GetAmountOfConnectionLines
 	
 	/**
@@ -138,7 +138,7 @@ public class TerritoriesMap implements Serializable {
 	 * @return		Team at said index.
 	 */
 	public Team GetTeam(int index) {
-		return Teams.get(index);
+		return Teams_.get(index);
 	} // END GetTeam
 	
 	/**
@@ -147,7 +147,7 @@ public class TerritoriesMap implements Serializable {
 	 * @return		Territory at said index.
 	 */
 	public Territory GetTerritory(int index) {
-		return Territories.get(index);
+		return Territories_.get(index);
 	} // END GetTerritory
 	
 	/**
@@ -156,7 +156,7 @@ public class TerritoriesMap implements Serializable {
 	 * @return		Boolean representation of aforementioned logic.
 	 */
 	public Boolean TeamExists(Team team) {
-		return Teams.contains(team);
+		return Teams_.contains(team);
 	} // END TeamExists
 	
 	/**
@@ -165,7 +165,7 @@ public class TerritoriesMap implements Serializable {
 	 * @return			Boolean representation of aforementioned logic.
 	 */
 	public Boolean TerritoryExists(Territory territory) {
-		return Territories.contains(territory);
+		return Territories_.contains(territory);
 	} // END TerritoryExists
 	
 	/**
@@ -174,7 +174,7 @@ public class TerritoriesMap implements Serializable {
 	 * @return		Boolean representation of aforementioned logic.
 	 */
 	public Boolean ConnectionLineExists(ConnectionLine cLine) {
-		return Connections.contains(cLine);
+		return Connections_.contains(cLine);
 	} // END ConnectionLineExists
 	
 	/**
@@ -183,8 +183,8 @@ public class TerritoriesMap implements Serializable {
 	 * @return			Owning team.
 	 */
 	public Team GetTerritoryOwner(Territory territory) {
-		if (OwnersMap.containsKey(territory)) {
-			return OwnersMap.get(territory);
+		if (OwnersMap_.containsKey(territory)) {
+			return OwnersMap_.get(territory);
 		} else {
 			return null;
 		}
@@ -197,9 +197,9 @@ public class TerritoriesMap implements Serializable {
 	 */
 	public ArrayList<Territory> GetOwnedTerritories(Team team) {
 		ArrayList<Territory> returnValue = new ArrayList<Territory>();
-		for (int i = 0; i < Territories.size(); i++) {
-			if (OwnersMap.get(Territories.get(i)).equals(team)) {
-				returnValue.add(Territories.get(i));
+		for (int i = 0; i < Territories_.size(); i++) {
+			if (OwnersMap_.get(Territories_.get(i)).equals(team)) {
+				returnValue.add(Territories_.get(i));
 			}
 		}
 		return returnValue;
@@ -211,9 +211,9 @@ public class TerritoriesMap implements Serializable {
 	 */
 	public ArrayList<Territory> GetUnboundedTerritories() {
 		ArrayList<Territory> returnValue = new ArrayList<Territory>();
-		for (int i = 0; i < Territories.size(); i++) {
-			if (!OwnersMap.containsValue(Territories.get(i))) {
-				returnValue.add(Territories.get(i));
+		for (int i = 0; i < Territories_.size(); i++) {
+			if (!OwnersMap_.containsValue(Territories_.get(i))) {
+				returnValue.add(Territories_.get(i));
 			}
 		}
 		return returnValue;
@@ -249,9 +249,9 @@ public class TerritoriesMap implements Serializable {
 		imageManipulator.setStroke(territoryOutline);
 		
 		// draw each territory 1 by 1
-		for (int i = 0; i < Teams.size(); i++) {
-			Color teamColor = Teams.get(i).Color;
-			ArrayList<Territory> territories = GetOwnedTerritories(Teams.get(i));
+		for (int i = 0; i < Teams_.size(); i++) {
+			Color teamColor = Teams_.get(i).Color;
+			ArrayList<Territory> territories = GetOwnedTerritories(Teams_.get(i));
 			for (int j = 0; j < territories.size(); j++) {
 				Polygon currentRegion = territories.get(j).Region;
 				// first the region
@@ -266,8 +266,8 @@ public class TerritoriesMap implements Serializable {
 		
 		// draw the connecting lines
 		imageManipulator.setColor(Color.GRAY);
-		for (int i = 0; i < Connections.size(); i++) {
-			ConnectionLine currentLine = Connections.get(i);
+		for (int i = 0; i < Connections_.size(); i++) {
+			ConnectionLine currentLine = Connections_.get(i);
 			if (currentLine.Wrapping) {
 				// find slope of the lines
 				final float length = 15;
