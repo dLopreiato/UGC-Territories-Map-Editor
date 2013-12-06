@@ -3,7 +3,7 @@ package org.urbangaming.territories.client;
 /**
  * This is a class that encapsulates two strings to represent the directory and file of a path.
  * @author Andrew Lopreiato
- * @version 1.0 12/4/13
+ * @version 1.1 12/6/13
  */
 public class Path {
 	
@@ -28,6 +28,21 @@ public class Path {
 	public Path(String dir, String file) {
 		Directory = dir;
 		File = file;
+	}
+	
+	/**
+	 * Constructs a path with a given directory and filename only if the the path leads to a file with a given suffix.
+	 * @param dir			Directory.
+	 * @param file			File.
+	 * @param fileSuffix	File ending.
+	 */
+	public Path(String dir, String file, String fileSuffix) {
+		if (file.endsWith(fileSuffix)) {
+			Directory = dir;
+			File = file;
+		} else {
+			throw new RuntimeException("File is not a '" + fileSuffix + "' file.");
+		}
 	}
 	
 	/**

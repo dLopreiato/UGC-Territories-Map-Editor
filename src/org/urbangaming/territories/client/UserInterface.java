@@ -17,7 +17,7 @@ import org.urbangaming.territories.core.TerritoriesMap;
 public class UserInterface extends JFrame {
 
 	// DATA MEMBERS
-	private JScrollPane TerritoriesPanelScrollPane_;
+	private JScrollPane MainCanvas_;
 	private TerritoriesPanel TerritoriesPanel_;
 	private JMenuBar MenuBar_;
 	private static final long serialVersionUID = 1L;
@@ -29,23 +29,22 @@ public class UserInterface extends JFrame {
 		setLocation(0, 0);
 		setSize(640, 480);
 		
-		addContentComponents();
+		initializeTerritoriesPanel();
+		initializeMenuBar();
 		
-		addMenuBar();
+		MainCanvas_ = new JScrollPane();
+		// Set default view as the territories panel
+		MainCanvas_.setViewportView(TerritoriesPanel_);
+		add(MainCanvas_);
+		
 	}
 	
-	private void addContentComponents() {
+	private void initializeTerritoriesPanel() {
 		// initialize all the content driven components
-		TerritoriesPanelScrollPane_ = new JScrollPane();
 		TerritoriesPanel_ = new TerritoriesPanel();
-		
-		TerritoriesPanelScrollPane_.setViewportView(TerritoriesPanel_);
-		
-		// and finally add everything
-		add(TerritoriesPanelScrollPane_);
 	}
 	
-	private void addMenuBar() {
+	private void initializeMenuBar() {
 		// initialize all the menu bar buttons
 		MenuBar_ = new JMenuBar();
 		JMenu fileMenu = new JMenu("File");

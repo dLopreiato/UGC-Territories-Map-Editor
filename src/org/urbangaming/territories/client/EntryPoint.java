@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
  * This is the class that should be used by the territories admin. This class is the entry point for users wanting to
  * use a graphical interface. A map file must already be in existence for this driver to work.
  * @author Andrew Lopreiato
- * @version 1.3 12/4/13
+ * @version 1.3.1 12/6/13
  */
 public class EntryPoint {
 	// DATA MEMBERS
@@ -32,7 +32,7 @@ public class EntryPoint {
 		
 		MapDataPath_ = new Path();
 		InputImagePath_ = new Path("", "BaseMap.png");
-		OutputImagePath_ = new Path();
+		OutputImagePath_ = new Path("", "OutputMap.png");
 		
 		FileDialog_ = new FileDialog(UserInterface_);
 		
@@ -50,9 +50,7 @@ public class EntryPoint {
 				FileDialog_.setEnabled(true);
 				FileDialog_.setVisible(true);
 				if (FileDialog_.getFile() != null) { //only continue on if a file was actually selected
-					MapDataPath_.Directory = FileDialog_.getDirectory();
-					MapDataPath_.File = FileDialog_.getFile();
-					ValidateMapDataFileType();
+					MapDataPath_  = new Path(FileDialog_.getDirectory(), FileDialog_.getFile(), ".trmp");
 					UserInterface_.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 					TerritoriesMap_ = TerritoriesMap.Deserialize(MapDataPath_.toString());
 					UserInterface_.UpdateTerritoriesPanel(TerritoriesMap_);
@@ -70,7 +68,6 @@ public class EntryPoint {
 			try {
 				UserInterface_.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 				SyncUIToTerritoriesMap();
-				ValidateMapDataFileType();
 				TerritoriesMap_.Serialize(MapDataPath_.toString());
 			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(UserInterface_, ex.getLocalizedMessage());
@@ -91,9 +88,7 @@ public class EntryPoint {
 				FileDialog_.setVisible(true);
 				if (FileDialog_.getFile() != null) { //only continue on if a file was actually selected
 					UserInterface_.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-					MapDataPath_.Directory = FileDialog_.getDirectory();
-					MapDataPath_.File = FileDialog_.getFile();
-					ValidateMapDataFileType();
+					MapDataPath_ = new Path(FileDialog_.getDirectory(), FileDialog_.getFile(), ".trmp");
 					SyncUIToTerritoriesMap();
 					TerritoriesMap_.Serialize(MapDataPath_.toString());
 				}
@@ -110,8 +105,6 @@ public class EntryPoint {
 			try {
 				UserInterface_.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 				SyncUIToTerritoriesMap();
-				ValidateInputImageFileType();
-				ValidateOutputImageFileType();
 				TerritoriesMap_.Draw(InputImagePath_.toString(), OutputImagePath_.toString());
 			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(UserInterface_, ex.getLocalizedMessage());
@@ -132,10 +125,7 @@ public class EntryPoint {
 				FileDialog_.setVisible(true);
 				if (FileDialog_.getFile() != null) { //only continue on if a file was actually selected
 					UserInterface_.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-					OutputImagePath_.Directory = FileDialog_.getDirectory();
-					OutputImagePath_.File = FileDialog_.getFile();
-					ValidateInputImageFileType();
-					ValidateOutputImageFileType();
+					OutputImagePath_ = new Path(FileDialog_.getDirectory(), FileDialog_.getFile(), ".png");
 					SyncUIToTerritoriesMap();
 					TerritoriesMap_.Draw(InputImagePath_.toString(), OutputImagePath_.toString());
 				}
@@ -157,9 +147,7 @@ public class EntryPoint {
 				FileDialog_.setEnabled(true);
 				FileDialog_.setVisible(true);
 				if (FileDialog_.getFile() != null) { //only continue on if a file was actually selected
-					InputImagePath_.Directory = FileDialog_.getDirectory();
-					InputImagePath_.File = FileDialog_.getFile();
-					ValidateInputImageFileType();
+					InputImagePath_ = new Path(FileDialog_.getDirectory(), FileDialog_.getFile(), ".png");
 				}
 			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(UserInterface_, ex.getLocalizedMessage());
@@ -179,27 +167,6 @@ public class EntryPoint {
 		for (int i = 0; i < TerritoriesMap_.GetAmountOfTerritories(); i++) {
 			TerritoriesMap_.SetTerritoriesTeam(TerritoriesMap_.GetTerritory(i),
 			TerritoriesMap_.GetTeam(UserInterface_.GetTerritoryChoice(i)));
-		}
-	}
-	
-	private static void ValidateMapDataFileType() {
-		if (!MapDataPath_.IsFileType(".trmp"))
-		{
-			throw new RuntimeException("File is not a 'trmap'");
-		}
-	}
-	
-	private static void ValidateInputImageFileType() {
-		if (!InputImagePath_.IsFileType(".png"))
-		{
-			throw new RuntimeException("File is not a 'png'");
-		}
-	}
-	
-	private static void ValidateOutputImageFileType() {
-		if (!OutputImagePath_.IsFileType(".png"))
-		{
-			throw new RuntimeException("File is not a 'png'");
 		}
 	}
 } // END MainDriver
