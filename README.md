@@ -3,6 +3,9 @@
 
 ---------------------------
 
+## Requirements ##
+Java 1.7
+
 ### Who is this for? ###
 Although made initially for the director of Territories at Penn State, anyone may use this code and change it as they wish.
 
