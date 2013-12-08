@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
  * This is the class that should be used by the territories admin. This class is the entry point for users wanting to
  * use a graphical interface. A map file must already be in existence for this driver to work.
  * @author Andrew Lopreiato
- * @version 1.3.1 12/6/13
+ * @version 1.4 12/6/13
  */
 public class EntryPoint {
 	// DATA MEMBERS
@@ -18,7 +18,6 @@ public class EntryPoint {
 	private static UserInterface UserInterface_;
 	private static FileDialog FileDialog_;
 	private static Path MapDataPath_;
-	private static Path InputImagePath_;
 	private static Path OutputImagePath_;
 	// END DATA MEMBERS
 	
@@ -31,7 +30,6 @@ public class EntryPoint {
 		TerritoriesMap_ = new TerritoriesMap();
 		
 		MapDataPath_ = new Path();
-		InputImagePath_ = new Path("", "BaseMap.png");
 		OutputImagePath_ = new Path("", "OutputMap.png");
 		
 		FileDialog_ = new FileDialog(UserInterface_);
@@ -105,7 +103,7 @@ public class EntryPoint {
 			try {
 				UserInterface_.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 				SyncUIToTerritoriesMap();
-				TerritoriesMap_.Draw(InputImagePath_.toString(), OutputImagePath_.toString());
+				TerritoriesMap_.Draw(OutputImagePath_.toString());
 			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(UserInterface_, ex.getLocalizedMessage());
 			}
@@ -127,31 +125,12 @@ public class EntryPoint {
 					UserInterface_.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 					OutputImagePath_ = new Path(FileDialog_.getDirectory(), FileDialog_.getFile(), ".png");
 					SyncUIToTerritoriesMap();
-					TerritoriesMap_.Draw(InputImagePath_.toString(), OutputImagePath_.toString());
+					TerritoriesMap_.Draw(OutputImagePath_.toString());
 				}
 			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(UserInterface_, ex.getLocalizedMessage());
 			}
 			UserInterface_.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-		}
-	}
-
-	public static class SetBaseListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			try {
-				FileDialog_.setMode(FileDialog.LOAD);
-				FileDialog_.setTitle("Choose An Output");
-				FileDialog_.setDirectory(InputImagePath_.Directory);
-				FileDialog_.setFile(InputImagePath_.File);
-				FileDialog_.setEnabled(true);
-				FileDialog_.setVisible(true);
-				if (FileDialog_.getFile() != null) { //only continue on if a file was actually selected
-					InputImagePath_ = new Path(FileDialog_.getDirectory(), FileDialog_.getFile(), ".png");
-				}
-			} catch (Exception ex) {
-				JOptionPane.showMessageDialog(UserInterface_, ex.getLocalizedMessage());
-			}
 		}
 	}
 	

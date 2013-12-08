@@ -12,7 +12,7 @@ import org.urbangaming.territories.core.TerritoriesMap;
 /**
  * This class provides the graphical user interface for the territories map client.
  * @author Andrew Lopreiato
- * @version 1.0 12/4/2013
+ * @version 1.1 12/8/2013
  */
 public class UserInterface extends JFrame {
 
@@ -52,7 +52,6 @@ public class UserInterface extends JFrame {
 		JMenuItem openOption = new JMenuItem("Open Map...");
 		JMenuItem saveMapOption = new JMenuItem("Save Map");
 		JMenuItem saveMapAsOption = new JMenuItem("Save Map As...");
-		JMenuItem setBaseImageOption = new JMenuItem("Set Base Image...");
 		JMenuItem drawMapOption = new JMenuItem("Draw Map");
 		JMenuItem drawMapAsOption = new JMenuItem("Draw Map As...");
 		JMenuItem aboutOption = new JMenuItem("About");
@@ -63,7 +62,6 @@ public class UserInterface extends JFrame {
 		fileMenu.add(saveMapOption);
 		fileMenu.add(saveMapAsOption);
 		fileMenu.addSeparator();
-		fileMenu.add(setBaseImageOption);
 		fileMenu.add(drawMapOption);
 		fileMenu.add(drawMapAsOption);
 		
@@ -74,7 +72,6 @@ public class UserInterface extends JFrame {
 		openOption.addActionListener(new EntryPoint.OpenListener());
 		saveMapOption.addActionListener(new EntryPoint.SaveListener());
 		saveMapAsOption.addActionListener(new EntryPoint.SaveAsListener());
-		setBaseImageOption.addActionListener(new EntryPoint.SetBaseListener());
 		drawMapOption.addActionListener(new EntryPoint.DrawListener());
 		drawMapAsOption.addActionListener(new EntryPoint.DrawAsListener());
 		aboutOption.addActionListener(new EntryPoint.AboutListener());

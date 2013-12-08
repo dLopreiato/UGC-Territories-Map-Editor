@@ -23,7 +23,7 @@ import javax.imageio.ImageIO;
  * and connections between territories. Serialization has also been written into the class, making reading and writing
  * to disk easy.
  * @author Andrew Lopreiato
- * @version 1.3 12/4/13
+ * @version 1.4 12/8/13
  */
 public class TerritoriesMap implements Serializable {
 	
@@ -32,17 +32,38 @@ public class TerritoriesMap implements Serializable {
 	private ArrayList<Territory> Territories_;
 	private ArrayList<ConnectionLine> Connections_;
 	private HashMap<Territory, Team> OwnersMap_;
+	private SerializableBufferedPng BaseImage_;
 	// END DATA MEMBERS
 
 	/**
-	 * Constructs a map with no territories, teams, or ConnectionLines.
+	 * Constructs a map with no territories, teams, or ConnectionLines, with a null base map.
 	 */
-	public TerritoriesMap() {	
+	public TerritoriesMap() {
+		BaseImage_ = null;
 		Teams_ = new ArrayList<Team>();
 		Territories_ = new ArrayList<Territory>();
 		Connections_ = new ArrayList<ConnectionLine>();
 		OwnersMap_ = new HashMap<Territory, Team>();
 	} // END TerritoriesMap
+	
+	/**
+	 * Constructs a map with no territories, teams, or ConnectionLines.
+	 */
+	public TerritoriesMap(BufferedImage baseImage) {
+		BaseImage_ = new SerializableBufferedPng(baseImage);
+		Teams_ = new ArrayList<Team>();
+		Territories_ = new ArrayList<Territory>();
+		Connections_ = new ArrayList<ConnectionLine>();
+		OwnersMap_ = new HashMap<Territory, Team>();
+	} // END TerritoriesMap
+	
+	/**
+	 * Changes the base image.
+	 * @param baseImage	SerializableBufferedPng representation.
+	 */
+	public void SetBaseImage(SerializableBufferedPng baseImage) {
+		BaseImage_ = baseImage;
+	} // END SetBaseImage
 	
 	/**
 	 * Adds a territory and with a given team.
@@ -233,12 +254,12 @@ public class TerritoriesMap implements Serializable {
 	 * @param outputFilename	File name of the output map.
 	 * @throws IOException		If an error occurred in the reading/writing process.
 	 */
-	public void Draw(String inputFilename, String outputFilename) throws IOException {
+	public void Draw(String outputFilename) throws IOException {
 		// start a temporary list of ConnectionLines to be used as containers for wrapping circles
 		ArrayList<ConnectionLine> wrappingCircles = new ArrayList<ConnectionLine>();
 		
-		// read in
-		BufferedImage storedImage = ImageIO.read(new File(inputFilename));
+		// make a copy so that we don't overwrite what we currently have when they draw and then save
+		BufferedImage storedImage = BaseImage_.Copy().BufferedImage;
 		Graphics2D imageManipulator = storedImage.createGraphics();
 		
 		//set antialiasing on to make it look less awful
@@ -343,5 +364,5 @@ public class TerritoriesMap implements Serializable {
 	} // END Deserialize
 	
 	/** Serialization version as of last update **/
-	private static final long serialVersionUID = 3L;
+	private static final long serialVersionUID = 4L;
 }

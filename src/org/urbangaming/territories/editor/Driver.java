@@ -1,12 +1,13 @@
 package org.urbangaming.territories.editor;
 import java.awt.*;
 import java.io.*;
+import javax.imageio.ImageIO;
 import org.urbangaming.territories.core.*;
 
 /**
  * This is the temporary class that will manually write all of the given map data to a file.
  * @author Andrew Lopreiato
- * @version 1.2 11/26/13
+ * @version 1.3 12/8/13
  */
 public class Driver {
 
@@ -20,24 +21,25 @@ public class Driver {
 	 */
 	public static void main(String[] args) {
 		// initialize map
-		TerritoriesMap territoriesFallMap = new TerritoriesMap();
-		
-		// populate team list
-		PopulateTeamList(territoriesFallMap);
-		
-		// populate territory list
-		PopulateTerritoryList(territoriesFallMap);
-		
-		// populate connection list
-		PopulateConnectionList(territoriesFallMap);
-		
-		// Serialize the map
+		TerritoriesMap territoriesFallMap;
 		try {
+			territoriesFallMap = new TerritoriesMap(ImageIO.read(new File("BaseMap.png")));
+			
+			// populate team list
+			PopulateTeamList(territoriesFallMap);
+			
+			// populate territory list
+			PopulateTerritoryList(territoriesFallMap);
+			
+			// populate connection list
+			PopulateConnectionList(territoriesFallMap);
+			
+			// Serialize the mpa
 			System.out.println("Saving map...");
 			territoriesFallMap.Serialize(SAVE_FILE);
 			System.out.println("Map Saved.");
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		}
 		
 	} // END main

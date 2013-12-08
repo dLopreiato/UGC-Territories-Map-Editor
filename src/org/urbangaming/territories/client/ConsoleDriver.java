@@ -7,13 +7,12 @@ import org.urbangaming.territories.core.*;
  * This is the class that should be used by the territories admin. This class only allows editing of teams through the
  * console. A map file must already be in existence for this driver to work.
  * @author Andrew Lopreiato
- * @version 1.5 11/24/13
+ * @version 1.6 12/8/13
  */
 public class ConsoleDriver {
 
 	// CONSTANTS
 	public static final String MAP_FILE = "Fall2013.trmp";
-	public static final String BASE_MAP = "BaseMap.png";
 	public static final String OUTPUT_MAP = "OutputMap.png";
 	// END CONSTANTS
 	
@@ -57,7 +56,7 @@ public class ConsoleDriver {
 			
 			// draw the map
 			System.out.println("Drawing map...");
-			territoriesFallMap.Draw(BASE_MAP, OUTPUT_MAP);
+			territoriesFallMap.Draw(OUTPUT_MAP);
 			System.out.println("Map drawn.");
 			
 			// save the map
