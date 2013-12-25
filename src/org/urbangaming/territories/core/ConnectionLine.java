@@ -5,7 +5,7 @@ import java.io.Serializable;
  * Encapsulates the necessary data for a line. This type should be used specifically for lines that connect the
  * territories. If a line has wrapping enabled, it should represent a connection that is to wrap around the world.
  * @author Andrew Lopreiato
- * @version 1.3 12/24/13
+ * @version 1.3.1 12/24/13
  */
 public class ConnectionLine implements Serializable {
 	
@@ -15,7 +15,7 @@ public class ConnectionLine implements Serializable {
 	public int X2;
 	public int Y2;
 	public Boolean Wrapping;
-	private static final long serialVersionUID = 3L;
+	private static final long serialVersionUID = 4L;
 	// END DATA MEMBERS
 	
 	/**
@@ -65,7 +65,11 @@ public class ConnectionLine implements Serializable {
 	 * @param other	The other connection line.
 	 * @return		Boolean representation of comparison.
 	 */
-	public boolean equals(ConnectionLine other) {
+	@Override
+	public boolean equals(Object object) {
+		if (object.getClass() != this.getClass())
+			return false;
+		ConnectionLine other = (ConnectionLine)object;
 		return (other.Wrapping.equals(this.Wrapping)) && (other.X1 == this.X1) && (other.X2 == this.X2) && 
 				(other.Y1 == this.Y1) && (other.Y2 == this.Y2); 
 	} // END equals

@@ -4,23 +4,19 @@ import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
 import java.io.IOException;
 import java.io.Serializable;
-
 import javax.imageio.ImageIO;
 
 /**
  * A wrapper class used to serialize buffered images.
  * @author Andrew Lopreiato
- * @version 1.0 12/7/2013
+ * @version 1.0.1 12/24/2013
  */
 public class SerializableBufferedPng implements Serializable {
 
 	// DATA MEMBERS
 	public BufferedImage BufferedImage;
+	private static final long serialVersionUID = 2L;
 	// END DATA MEMBERS
-	
-	// CONSTANTS
-	private static final long serialVersionUID = 1L;
-	// END CONSTANTS
 	
 	/**
 	 * Constructs a SerializableBufferedPng with a null BufferedImage.
@@ -55,5 +51,18 @@ public class SerializableBufferedPng implements Serializable {
 	
 	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException{
 		BufferedImage = ImageIO.read(ImageIO.createImageInputStream(in));
+	}
+	
+	/**
+	 * Returns if the two serializable buffered pngs are of equal values.
+	 * @param other	The other serializable buffered png.
+	 * @return		Boolean representation of comparison.
+	 */
+	@Override
+	public boolean equals(Object object) {
+		if (object.getClass() != this.getClass())
+			return false;
+		SerializableBufferedPng other = (SerializableBufferedPng)object;
+		return (other.BufferedImage.equals(this.BufferedImage));
 	}
 }

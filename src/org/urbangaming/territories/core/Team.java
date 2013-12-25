@@ -6,14 +6,14 @@ import java.io.Serializable;
  * Encapsulates necessary data for an abstract Team. This includes a name, which will be displayed to the user at
  * runtime; and a color, which will decide the color drawn on the map of the territories it owns.
  * @author Andrew Lopreiato
- * @version 1.4 12/24/13
+ * @version 1.4.1 12/24/13
  */
 public class Team implements Serializable {
 
 	// DATA MEMBERS
 	public String Name;
 	public Color Color;
-	private static final long serialVersionUID = 3L;
+	private static final long serialVersionUID = 4L;
 	// END DATA MEMEBERS
 	
 	/**
@@ -40,7 +40,11 @@ public class Team implements Serializable {
 	 * @param other	The other team.
 	 * @return		Boolean representation of comparison.
 	 */
-	public boolean equals(Team other) {
+	@Override
+	public boolean equals(Object object) {
+		if (object.getClass() != this.getClass())
+			return false;
+		Team other = (Team)object;
 		return (other.Name.equals(this.Name)) && (other.Color.equals(this.Color));
 	} // END equals
 }
