@@ -6,14 +6,14 @@ import java.io.Serializable;
  * Encapsulates necessary data for an abstract Territory. This includes a name, which will be displayed to the user at
  * runtime; and a polygon, which will be what the application uses to actually draw the shape.
  * @author Andrew Lopreiato
- * @version 1.3.1 12/24/13
+ * @version 1.3.2 12/24/13
  */
 public class Territory implements Serializable{
 	
 	// DATA MEMBERS
 	public String Name;
 	public Polygon Region;
-	private static final long serialVersionUID = 3L;
+	private static final long serialVersionUID = 4L;
 	// END DATA MEMBERS
 	
 	/**
@@ -47,4 +47,13 @@ public class Territory implements Serializable{
 		Territory other = (Territory)object;
 		return (other.Name.equals(this.Name)) && (other.Region.equals(this.Region));
 	} // END equals
+	
+	/**
+	 * Returns the name of the territory.
+	 * @return 	String representation.
+	 */
+	@Override
+	public String toString() {
+		return Name;
+	} // END toString
 }
