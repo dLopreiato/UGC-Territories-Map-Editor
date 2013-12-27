@@ -1,4 +1,5 @@
 package org.urbangaming.territories.client;
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.FileDialog;
 import java.awt.event.ActionEvent;
@@ -6,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import javax.swing.JColorChooser;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -25,7 +27,7 @@ import org.urbangaming.territories.core.TerritoryException;
 /**
  * This class contains the entry point for the tabbed version of the user interface.
  * @author Andrew Lopreiato
- * @version 1.0 12/25/2013
+ * @version 1.1 12/27/2013
  */
 public class TabbedDriver {
 
@@ -78,16 +80,14 @@ public class TabbedDriver {
 	private void InitializeMenuBar() {
 		// initialize the menu bar and its defaults
 		Menus_ = new JMenuBar();
+		
+		// set the file menu
 		JMenu fileMenu = new JMenu("File");
-		JMenu helpMenu = new JMenu("Help");
 		JMenuItem openOption = new JMenuItem("Open Map...");
 		JMenuItem saveMapOption = new JMenuItem("Save Map");
 		JMenuItem saveMapAsOption = new JMenuItem("Save Map As...");
 		JMenuItem drawMapOption = new JMenuItem("Draw Map");
 		JMenuItem drawMapAsOption = new JMenuItem("Draw Map As...");
-		JMenuItem aboutOption = new JMenuItem("About");
-		
-		// set the file menu options
 		fileMenu.add(openOption);
 		fileMenu.addSeparator();
 		fileMenu.add(saveMapOption);
@@ -95,27 +95,44 @@ public class TabbedDriver {
 		fileMenu.addSeparator();
 		fileMenu.add(drawMapOption);
 		fileMenu.add(drawMapAsOption);
-		
-		// set the help menu options
-		helpMenu.add(aboutOption);
-		
-		// set the option listeners
 		openOption.addActionListener(new OpenListener());
 		saveMapOption.addActionListener(new SaveListener(false));
 		saveMapAsOption.addActionListener(new SaveListener(true));
 		drawMapOption.addActionListener(new DrawListener(false));
 		drawMapAsOption.addActionListener(new DrawListener(true));
-		aboutOption.addActionListener(new AboutListener());
-		
-		// set all the keyboard shortcuts
 		openOption.setAccelerator(KeyStroke.getKeyStroke('O', InputEvent.CTRL_DOWN_MASK));
 		saveMapOption.setAccelerator(KeyStroke.getKeyStroke('S', InputEvent.CTRL_DOWN_MASK));
 		saveMapAsOption.setAccelerator(KeyStroke.getKeyStroke('S', InputEvent.ALT_DOWN_MASK));
 		drawMapOption.setAccelerator(KeyStroke.getKeyStroke('D', InputEvent.CTRL_DOWN_MASK));
 		drawMapAsOption.setAccelerator(KeyStroke.getKeyStroke('D', InputEvent.ALT_DOWN_MASK));
 		
+		// set the teams menu
+		JMenu teamMenu = new JMenu("Teams");
+		JMenuItem addTeamOption = new JMenuItem("Add New Team");
+		JMenuItem deleteAllOption = new JMenuItem("Delete All Teams");
+		JMenuItem cullTeamsOption = new JMenuItem("Cull Teams");
+		JMenuItem normalizeAlphaOption = new JMenuItem("Normalize Transparency");
+		teamMenu.add(addTeamOption);
+		teamMenu.add(deleteAllOption);
+		teamMenu.add(cullTeamsOption);
+		teamMenu.add(normalizeAlphaOption);
+		addTeamOption.addActionListener(GetAddTeamListener());
+		deleteAllOption.addActionListener(new DeleteAllTeamsListener());
+		cullTeamsOption.addActionListener(new CullTeamsListener());
+		normalizeAlphaOption.addActionListener(new NormalizeAlphaListener());
+		addTeamOption.setAccelerator(KeyStroke.getKeyStroke('T', InputEvent.CTRL_DOWN_MASK));
+		normalizeAlphaOption.setAccelerator(KeyStroke.getKeyStroke('N', InputEvent.CTRL_DOWN_MASK));
+		
+		
+		// set the help menu
+		JMenu helpMenu = new JMenu("Help");
+		JMenuItem aboutOption = new JMenuItem("About");
+		helpMenu.add(aboutOption);
+		aboutOption.addActionListener(new AboutListener());
+		
 		// add all the menus
 		Menus_.add(fileMenu);
+		Menus_.add(teamMenu);
 		Menus_.add(helpMenu);
 		MainWindow_.setJMenuBar(Menus_);
 		// END initialize the menu bar and its defaults
@@ -177,7 +194,6 @@ public class TabbedDriver {
 				if (FileDialog_.getFile() != null) { //only continue on if a file was actually selected
 					MainWindow_.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 					MapDataPath_ = new Path(FileDialog_.getDirectory(), FileDialog_.getFile(), ".trmp");
-					SynchronizeTerritoriesMap();
 					TerritoriesMap_.Serialize(MapDataPath_.toString());
 				}
 			} catch (Exception ex) {
@@ -206,7 +222,6 @@ public class TabbedDriver {
 				if (FileDialog_.getFile() != null) { //only continue on if a file was actually selected
 					MainWindow_.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 					OutputImagePath_ = new Path(FileDialog_.getDirectory(), FileDialog_.getFile(), ".png");
-					SynchronizeTerritoriesMap();
 					TerritoriesMap_.Draw(OutputImagePath_.toString());
 				}
 			} catch (Exception ex) {
@@ -271,8 +286,67 @@ public class TabbedDriver {
 		return new AddTeamListener();
 	}
 	
-	private void SynchronizeTerritoriesMap() {
-		// changes the territories map
+	private class TeamColorListener implements ActionListener {
+		private Team Team_;
+		public TeamColorListener(Team team) {
+			Team_ = team;
+		}
+		@Override
+		public void actionPerformed(ActionEvent ae) {
+			String frameTitle = "Choose the color for " + Team_.Name;
+			Color newColor = JColorChooser.showDialog(MainWindow_, frameTitle, Team_.Color);
+			if (newColor != null) {
+				Team_.Color = newColor;
+			}
+		}
+	}
+	
+	public ActionListener GetTeamColorListener(Team team) {
+		return new TeamColorListener(team);
+	}
+	
+	private class NormalizeAlphaListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent ae) {
+			for (int i = 1; i < TerritoriesMap_.GetAmountOfTeams(); i++) {
+				Color newColor = new Color(
+						TerritoriesMap_.GetTeam(i).Color.getRed(),
+						TerritoriesMap_.GetTeam(i).Color.getGreen(),
+						TerritoriesMap_.GetTeam(i).Color.getBlue(),
+						180);
+				TerritoriesMap_.GetTeam(i).Color = newColor; 
+			}
+		}
+	}
+	
+	private class DeleteAllTeamsListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent ae) {
+			Team unowned = TerritoriesMap_.GetTeam(0);
+			for (int i = 0; i < TerritoriesMap_.GetAmountOfTerritories(); i++) {
+				TerritoriesMap_.SetTerritoriesTeam(TerritoriesMap_.GetTerritory(i), unowned);
+			}
+			while (TerritoriesMap_.GetAmountOfTeams() >= 1) {
+				try {
+					TerritoriesMap_.RemoveTeam(TerritoriesMap_.GetTeam(1));
+				} catch (TerritoryException e) {
+					JOptionPane.showMessageDialog(MainWindow_, "Fatal Error: Couldn't delete all teams.");
+				}
+			}
+		}
+	}
+
+	private class CullTeamsListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent ae) {
+			for (int i = 0; i < TerritoriesMap_.GetAmountOfTeams();) {
+				try {
+					TerritoriesMap_.RemoveTeam(TerritoriesMap_.GetTeam(1));
+				} catch (TerritoryException e) {
+					i++;
+				}
+			}
+		}
 	}
 	
 	private void SynchronizeInterface() {

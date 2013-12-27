@@ -14,13 +14,14 @@ import org.urbangaming.territories.core.TerritoriesMap;
 /**
  * This class encapsulates all of the information shown on the team tab.
  * @author Andrew Lopreiato
- * @version 1.0 12/25/2013
+ * @version 1.1 12/27/2013
  */
 public class TeamTab extends JScrollPane {
 	
 	// DATA MEMBERS
 	private JPanel ScrollingPane_;
 	private HashMap<Team, JTextField> TextMap_;
+	//private HashMap<Team, Color> ColorMap_;
 	private static final long serialVersionUID = 1L;
 	// END DATA MEMBERS
 	
@@ -52,16 +53,17 @@ public class TeamTab extends JScrollPane {
 			gbc.gridy = i;
 			gbc.gridwidth = 1;
 			JTextField newField = new JTextField(relevantTeam.Name);
-			JButton colorPlaceHolder = new JButton("Color");
-			JButton saveButton = new JButton("Save");
+			JButton saveButton = new JButton("Rename");
 			saveButton.addActionListener(new TeamSaveListener(relevantTeam));
+			JButton colorChooserButton = new JButton("Color");
+			colorChooserButton.addActionListener(listenerOwner.GetTeamColorListener(relevantTeam));
 			JButton deleteButton = new JButton("Delete");
 			deleteButton.addActionListener(listenerOwner.GetDeleteTeamListener(relevantTeam));
 			
 			ScrollingPane_.add(newField, gbc);
 			TextMap_.put(relevantTeam, newField);
-			ScrollingPane_.add(colorPlaceHolder, gbc);
 			ScrollingPane_.add(saveButton, gbc);
+			ScrollingPane_.add(colorChooserButton, gbc);
 			ScrollingPane_.add(deleteButton, gbc);
 		}
 		
