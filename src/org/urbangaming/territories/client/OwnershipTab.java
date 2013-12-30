@@ -68,15 +68,4 @@ public class OwnershipTab extends JScrollPane{
 		this.setViewportView(ScrollingPane_);
 	} // END UpdateOptionsChoices
 
-	/*public void UpdateTerritoriesMap(TerritoriesMap tMap) throws SynchronizationException {
-		if (ChoiceList_.size() != tMap.GetAmountOfTerritories())
-			throw new SynchronizationException("The amount of territories do not match up.");
-		if (ChoiceList_.get(0).getItemCount() != tMap.GetAmountOfTeams())
-			throw new SynchronizationException("The amount of teams do not match up.");
-		
-		for (int i = 0; i < ChoiceList_.size(); i++) {
-			JComboBox<Team> relevantChoice = ChoiceList_.get(i);
-			tMap.SetTerritoriesTeam(tMap.GetTerritory(i), (Team)relevantChoice.getSelectedItem());
-		}
-	} */
 }

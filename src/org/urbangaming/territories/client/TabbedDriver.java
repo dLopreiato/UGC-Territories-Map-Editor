@@ -8,14 +8,11 @@ import java.awt.event.InputEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import javax.swing.JColorChooser;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
@@ -27,7 +24,7 @@ import org.urbangaming.territories.core.TerritoryException;
 /**
  * This class contains the entry point for the tabbed version of the user interface.
  * @author Andrew Lopreiato
- * @version 1.1 12/27/2013
+ * @version 1.1.1 12/30/2013
  */
 public class TabbedDriver {
 
@@ -36,6 +33,7 @@ public class TabbedDriver {
 	private JMenuBar Menus_;
 	private OwnershipTab OwnershipTab_;
 	private TeamTab TeamTab_;
+	private TerritoriesTab TerritoriesTab_;
 	private FileDialog FileDialog_;
 	private Path MapDataPath_;
 	private Path OutputImagePath_;
@@ -59,12 +57,6 @@ public class TabbedDriver {
 	
 	public void Run() {
 		MainWindow_.setVisible(true);
-	}
-	
-	private JPanel makeTextPanel(String s) {
-		JPanel herp = new JPanel();
-		herp.add(new JLabel(s));
-		return herp;
 	}
 	
 	private void InitializeFrame() {
@@ -147,8 +139,9 @@ public class TabbedDriver {
 		TeamTab_ = new TeamTab();
 		tabbedPane.addTab("Teams", TeamTab_);
 
-		JComponent panel3 = makeTextPanel("This pane should show what the territories are.");
-		tabbedPane.addTab("Territories", panel3);
+		TerritoriesTab_ = new TerritoriesTab();
+		tabbedPane.addTab("Territories", TerritoriesTab_);
+		
 		MainWindow_.add(tabbedPane);
 	}
 	
@@ -349,9 +342,32 @@ public class TabbedDriver {
 		}
 	}
 	
+	private class HoverMouseListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent ae) {
+			MainWindow_.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		}
+	}
+	
+	public ActionListener GetHoverMouseListener() {
+		return new HoverMouseListener();
+	}
+	
+	private class DefaultMouseListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent ae) {
+			MainWindow_.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+		}
+	}
+	
+	public ActionListener GetDefaultMouseListener() {
+		return new DefaultMouseListener();
+	}
+	
 	private void SynchronizeInterface() {
 		// changes the interface
 		OwnershipTab_.ReflectTerritoriesMap(TerritoriesMap_, this);
 		TeamTab_.ReflectTerritoriesMap(TerritoriesMap_, this);
+		TerritoriesTab_.ReflectTerritoriesMap(TerritoriesMap_, this);
 	}
 }

@@ -23,7 +23,7 @@ import javax.imageio.ImageIO;
  * and connections between territories. Serialization has also been written into the class, making reading and writing
  * to disk easy.
  * @author Andrew Lopreiato
- * @version 1.4.1 12/24/13
+ * @version 1.4.2 12/30/13
  */
 public class TerritoriesMap implements Serializable {
 	
@@ -153,6 +153,23 @@ public class TerritoriesMap implements Serializable {
 	public int GetAmountOfConnectionLines() {
 		return Connections_.size();
 	} // END GetAmountOfConnectionLines
+	
+	/**
+	 * Gives the base image.
+	 * @return	Relevant image.
+	 */
+	public BufferedImage GetBaseImage() {
+		return BaseImage_.BufferedImage;
+	}
+	
+	/**
+	 * Gives the ConnectionLine at an index.
+	 * @param index	Relevant query index.	
+	 * @return		ConnectionLine at said index.
+	 */
+	public ConnectionLine GetConnectionLine(int index) {
+		return Connections_.get(index);
+	}
 	
 	/**
 	 * Gives the team at an index.
