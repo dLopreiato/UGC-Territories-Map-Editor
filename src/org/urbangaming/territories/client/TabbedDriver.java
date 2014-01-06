@@ -24,7 +24,7 @@ import org.urbangaming.territories.core.TerritoryException;
 /**
  * This class contains the entry point for the tabbed version of the user interface.
  * @author Andrew Lopreiato
- * @version 1.1.1 12/30/2013
+ * @version 1.1.2 12/30/2013
  */
 public class TabbedDriver {
 
@@ -34,6 +34,7 @@ public class TabbedDriver {
 	private OwnershipTab OwnershipTab_;
 	private TeamTab TeamTab_;
 	private TerritoriesTab TerritoriesTab_;
+	private ConnectionsTab ConnectionsTab_;
 	private FileDialog FileDialog_;
 	private Path MapDataPath_;
 	private Path OutputImagePath_;
@@ -141,6 +142,9 @@ public class TabbedDriver {
 
 		TerritoriesTab_ = new TerritoriesTab();
 		tabbedPane.addTab("Territories", TerritoriesTab_);
+		
+		ConnectionsTab_ = new ConnectionsTab();
+		tabbedPane.addTab("Connections", ConnectionsTab_);
 		
 		MainWindow_.add(tabbedPane);
 	}
@@ -369,5 +373,6 @@ public class TabbedDriver {
 		OwnershipTab_.ReflectTerritoriesMap(TerritoriesMap_, this);
 		TeamTab_.ReflectTerritoriesMap(TerritoriesMap_, this);
 		TerritoriesTab_.ReflectTerritoriesMap(TerritoriesMap_, this);
+		ConnectionsTab_.ReflectTerritoriesMap(TerritoriesMap_, this);
 	}
 }

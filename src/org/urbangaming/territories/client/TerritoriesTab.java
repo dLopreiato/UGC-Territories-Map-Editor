@@ -13,7 +13,7 @@ import org.urbangaming.territories.core.Territory;
 /**
  * This class is the encapsulation of the information shown on the territories tab.
  * @author Andrew Lopreiato
- * @version 1.0 12/30/2013
+ * @version 1.0.1 12/30/2013
  */
 public class TerritoriesTab extends JPanel {
 	// DATA MEMBERS
@@ -43,7 +43,7 @@ public class TerritoriesTab extends JPanel {
 		currentTerritory.addItemListener(new PolygonSelectionListener());
 		TerritoryBar_.add(currentTerritory);
 		
-		JButton saveButton = new JButton("Save Shape");
+		JButton saveButton = new JButton("Save Data");
 		saveButton.addActionListener(new SavePolygonListener());
 		TerritoryBar_.add(saveButton);
 		
@@ -53,6 +53,7 @@ public class TerritoriesTab extends JPanel {
 		
 		add(TerritoryEditor_, BorderLayout.CENTER);
 		add(TerritoryBar_, BorderLayout.NORTH);
+		
 	}
 	
 	private class PolygonSelectionListener implements ItemListener {
