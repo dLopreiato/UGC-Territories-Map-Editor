@@ -14,7 +14,7 @@ import org.urbangaming.territories.core.TerritoriesMap;
 /**
  * The methods and data needed to run a panel that edits connections.
  * @author Andrew Lopreiato
- * @version 1.0 1/5/2014
+ * @version 1.0 1/6/2014
  */
 public class ConnectionsTab extends JPanel {
 	// DATA MEMBERS
@@ -35,6 +35,11 @@ public class ConnectionsTab extends JPanel {
 		this.removeAll();
 		if (tMap == null || listenerOwner == null)
 			return; // if its null, don't add anything
+		try {
+			tMap.GetBaseImage();
+		} catch (NullPointerException npe) {
+			return;
+		}
 		TerritoriesMap_ = tMap;
 		ConnectionIterateNumber_ = 0;
 		
@@ -72,7 +77,7 @@ public class ConnectionsTab extends JPanel {
 		ConnectionEditor_ = new ConnectionEditor(tMap.GetBaseImage(),
 				listenerOwner.GetDefaultMouseListener(),
 				listenerOwner.GetHoverMouseListener());
-		
+		RefreshIterateNumber();
 		add(ConnectionEditor_, BorderLayout.CENTER);
 		ConnectionEditor_.SetConnection(tMap.GetConnectionLine(0));
 		add(ConnectionBar_, BorderLayout.NORTH);
@@ -139,6 +144,11 @@ public class ConnectionsTab extends JPanel {
 	}
 	
 	private void RefreshIterateNumber() {
+		if (TerritoriesMap_.GetAmountOfConnectionLines() < 1) {
+			TerritoriesMap_.AddConnectionLine(new ConnectionLine(0, 0, 
+					TerritoriesMap_.GetBaseImage().getWidth() / 2, TerritoriesMap_.GetBaseImage().getHeight() / 2));
+			ConnectionIterateNumber_ = 0;
+		}
 		Integer displayInt = ConnectionIterateNumber_ + 1;
 		IterateLabel_.setText(displayInt.toString());
 		ConnectionEditor_.SetConnection(TerritoriesMap_.GetConnectionLine(ConnectionIterateNumber_));

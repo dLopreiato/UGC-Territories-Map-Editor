@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.File;
+import javax.imageio.ImageIO;
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -16,6 +18,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
+import org.urbangaming.territories.core.SerializableBufferedPng;
 import org.urbangaming.territories.core.Team;
 import org.urbangaming.territories.core.TerritoriesMap;
 import org.urbangaming.territories.core.Territory;
@@ -24,7 +27,7 @@ import org.urbangaming.territories.core.TerritoryException;
 /**
  * This class contains the entry point for the tabbed version of the user interface.
  * @author Andrew Lopreiato
- * @version 1.1.2 12/30/2013
+ * @version 1.2 1/6/2014
  */
 public class TabbedDriver {
 
@@ -76,11 +79,13 @@ public class TabbedDriver {
 		
 		// set the file menu
 		JMenu fileMenu = new JMenu("File");
+		JMenuItem newOption = new JMenuItem("New Map");
 		JMenuItem openOption = new JMenuItem("Open Map...");
 		JMenuItem saveMapOption = new JMenuItem("Save Map");
 		JMenuItem saveMapAsOption = new JMenuItem("Save Map As...");
 		JMenuItem drawMapOption = new JMenuItem("Draw Map");
 		JMenuItem drawMapAsOption = new JMenuItem("Draw Map As...");
+		fileMenu.add(newOption);
 		fileMenu.add(openOption);
 		fileMenu.addSeparator();
 		fileMenu.add(saveMapOption);
@@ -88,6 +93,7 @@ public class TabbedDriver {
 		fileMenu.addSeparator();
 		fileMenu.add(drawMapOption);
 		fileMenu.add(drawMapAsOption);
+		newOption.addActionListener(new NewListener());
 		openOption.addActionListener(new OpenListener());
 		saveMapOption.addActionListener(new SaveListener(false));
 		saveMapAsOption.addActionListener(new SaveListener(true));
@@ -100,20 +106,20 @@ public class TabbedDriver {
 		drawMapAsOption.setAccelerator(KeyStroke.getKeyStroke('D', InputEvent.ALT_DOWN_MASK));
 		
 		// set the teams menu
-		JMenu teamMenu = new JMenu("Teams");
-		JMenuItem addTeamOption = new JMenuItem("Add New Team");
+		JMenu otherMenu = new JMenu("Other");
 		JMenuItem deleteAllOption = new JMenuItem("Delete All Teams");
 		JMenuItem cullTeamsOption = new JMenuItem("Cull Teams");
 		JMenuItem normalizeAlphaOption = new JMenuItem("Normalize Transparency");
-		teamMenu.add(addTeamOption);
-		teamMenu.add(deleteAllOption);
-		teamMenu.add(cullTeamsOption);
-		teamMenu.add(normalizeAlphaOption);
-		addTeamOption.addActionListener(GetAddTeamListener());
+		JMenuItem setBaseImageOption = new JMenuItem("Set Base Image...");
+		otherMenu.add(deleteAllOption);
+		otherMenu.add(cullTeamsOption);
+		otherMenu.add(normalizeAlphaOption);
+		otherMenu.addSeparator();
+		otherMenu.add(setBaseImageOption);
 		deleteAllOption.addActionListener(new DeleteAllTeamsListener());
 		cullTeamsOption.addActionListener(new CullTeamsListener());
 		normalizeAlphaOption.addActionListener(new NormalizeAlphaListener());
-		addTeamOption.setAccelerator(KeyStroke.getKeyStroke('T', InputEvent.CTRL_DOWN_MASK));
+		setBaseImageOption.addActionListener(new BaseImageListener());
 		normalizeAlphaOption.setAccelerator(KeyStroke.getKeyStroke('N', InputEvent.CTRL_DOWN_MASK));
 		
 		
@@ -125,7 +131,7 @@ public class TabbedDriver {
 		
 		// add all the menus
 		Menus_.add(fileMenu);
-		Menus_.add(teamMenu);
+		Menus_.add(otherMenu);
 		Menus_.add(helpMenu);
 		MainWindow_.setJMenuBar(Menus_);
 		// END initialize the menu bar and its defaults
@@ -147,6 +153,15 @@ public class TabbedDriver {
 		tabbedPane.addTab("Connections", ConnectionsTab_);
 		
 		MainWindow_.add(tabbedPane);
+	}
+	
+	private class NewListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent ae) {
+			TerritoriesMap_ = new TerritoriesMap();
+			TerritoriesMap_.AddTeam(new Team("Unowned"));
+			SynchronizeInterface();
+		}
 	}
 	
 	private class OpenListener implements ActionListener {
@@ -346,6 +361,28 @@ public class TabbedDriver {
 		}
 	}
 	
+	private class BaseImageListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent ae) {
+			try {
+				FileDialog_.setMode(FileDialog.LOAD);
+				FileDialog_.setTitle("Choose A BaseMap");
+				FileDialog_.setDirectory(null);
+				FileDialog_.setEnabled(true);
+				FileDialog_.setVisible(true);
+				if (FileDialog_.getFile() != null) { //only continue on if a file was actually selected
+					MainWindow_.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+					TerritoriesMap_.SetBaseImage(new SerializableBufferedPng(
+							ImageIO.read(new File(FileDialog_.getFile()))));
+					SynchronizeInterface();
+				}
+			} catch (Exception ex) {
+				JOptionPane.showMessageDialog(MainWindow_, ex.getLocalizedMessage());
+			}
+			MainWindow_.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+		}
+	}
+	
 	private class HoverMouseListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent ae) {
@@ -366,6 +403,17 @@ public class TabbedDriver {
 	
 	public ActionListener GetDefaultMouseListener() {
 		return new DefaultMouseListener();
+	}
+	
+	private class SyncInterfaceListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent ae) {
+			SynchronizeInterface();
+		}
+	}
+	
+	public ActionListener GetSyncInterfaceListener() {
+		return new SyncInterfaceListener();
 	}
 	
 	private void SynchronizeInterface() {
