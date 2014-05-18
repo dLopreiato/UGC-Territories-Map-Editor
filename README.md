@@ -13,7 +13,7 @@ Although made initially for the director of Territories at Penn State, anyone ma
 Territories is a game that we play where we split the campus into separate territories distribute them, and then play 15 minute matches with nerf guns to determine who gets it. For more information check out the detailed rules on [our website](http://urbangaming.org/games/territories).
 
 ## How do I use this? ###
-Check out the [wiki](/wiki) for information on how to use this!
+Check out the [wiki](https://github.com/dLopreiato/UGC-Territories-Map-Editor/wiki) for information on how to use this!
 
 ### How do I use my own map? ###
 The map that the releases come with is the Penn State map, so unfortunately, you won't be able to just download the release. You'll need to fork the entire repo, though after that you only need to do two relatively straight forward tasks.  
